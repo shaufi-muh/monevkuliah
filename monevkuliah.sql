@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Generation Time: Aug 27, 2025 at 08:36 AM
+-- Generation Time: Aug 28, 2025 at 02:28 PM
 -- Server version: 8.4.3
--- PHP Version: 8.2.29
+-- PHP Version: 8.3.16
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -90,6 +90,12 @@ CREATE TABLE `failed_jobs` (
 DROP TABLE IF EXISTS `jawabans`;
 CREATE TABLE `jawabans` (
   `id` bigint UNSIGNED NOT NULL,
+  `pertanyaan_id` bigint UNSIGNED NOT NULL,
+  `dosen_id` bigint UNSIGNED NOT NULL,
+  `matakuliah_id` bigint UNSIGNED NOT NULL,
+  `real_pertemuan` int NOT NULL,
+  `jawaban_boolean` tinyint(1) NOT NULL,
+  `keterangan` text COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -140,6 +146,8 @@ CREATE TABLE `job_batches` (
 DROP TABLE IF EXISTS `kelas`;
 CREATE TABLE `kelas` (
   `id` bigint UNSIGNED NOT NULL,
+  `grup_kelas` char(1) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `nama_kelas` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -153,7 +161,7 @@ CREATE TABLE `kelas` (
 DROP TABLE IF EXISTS `kuisioners`;
 CREATE TABLE `kuisioners` (
   `id` bigint UNSIGNED NOT NULL,
-  `sesi` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `sesi` enum('Tengah','Akhir') COLLATE utf8mb4_unicode_ci NOT NULL,
   `deskripsi` text COLLATE utf8mb4_unicode_ci,
   `status` enum('aktif','tidak_aktif') COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'tidak_aktif',
   `created_at` timestamp NULL DEFAULT NULL,
@@ -283,6 +291,13 @@ CREATE TABLE `sessions` (
   `last_activity` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Dumping data for table `sessions`
+--
+
+INSERT INTO `sessions` (`id`, `user_id`, `ip_address`, `user_agent`, `payload`, `last_activity`) VALUES
+('HWgVfs9E06bMIKCiMeqkTgXpG4NTGQ2XwAlgxe2a', NULL, '127.0.0.1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/139.0.0.0 Safari/537.36', 'YTozOntzOjY6Il90b2tlbiI7czo0MDoibkQ2QmRmbHJWaEYxbWt4UmdUdlpBVHNVN3g4UDVENnNPMTlyM0RteSI7czo2OiJfZmxhc2giO2E6Mjp7czozOiJvbGQiO2E6MDp7fXM6MzoibmV3IjthOjA6e319czo5OiJfcHJldmlvdXMiO2E6MTp7czozOiJ1cmwiO3M6MjM6Imh0dHA6Ly9tb25ldmt1bGlhaC50ZXN0Ijt9fQ==', 1756391238);
+
 -- --------------------------------------------------------
 
 --
@@ -301,6 +316,13 @@ CREATE TABLE `users` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`id`, `name`, `email`, `email_verified_at`, `password`, `role`, `remember_token`, `created_at`, `updated_at`) VALUES
+(1, 'Op Kombis', 'kombis@example.com', NULL, '$2y$12$NMzd0Laag/UE6pBfmHnZ4uFYgiQg/toMp3dS1ruIhMBFedXwyi/8S', 'jurusan', NULL, '2025-08-28 06:07:17', '2025-08-28 06:07:17');
 
 --
 -- Indexes for dumped tables
@@ -335,7 +357,10 @@ ALTER TABLE `failed_jobs`
 -- Indexes for table `jawabans`
 --
 ALTER TABLE `jawabans`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `jawabans_pertanyaan_id_foreign` (`pertanyaan_id`),
+  ADD KEY `jawabans_dosen_id_foreign` (`dosen_id`),
+  ADD KEY `jawabans_matakuliah_id_foreign` (`matakuliah_id`);
 
 --
 -- Indexes for table `jobs`
@@ -490,11 +515,19 @@ ALTER TABLE `prodis`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` bigint UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `jawabans`
+--
+ALTER TABLE `jawabans`
+  ADD CONSTRAINT `jawabans_dosen_id_foreign` FOREIGN KEY (`dosen_id`) REFERENCES `dosens` (`id`),
+  ADD CONSTRAINT `jawabans_matakuliah_id_foreign` FOREIGN KEY (`matakuliah_id`) REFERENCES `mata_kuliahs` (`id`),
+  ADD CONSTRAINT `jawabans_pertanyaan_id_foreign` FOREIGN KEY (`pertanyaan_id`) REFERENCES `pertanyaans` (`id`);
 
 --
 -- Constraints for table `pertanyaans`

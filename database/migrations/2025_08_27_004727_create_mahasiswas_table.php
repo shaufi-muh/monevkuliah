@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('nama', 150);
             $table->string('email')->unique();
             $table->string('no_telp')->nullable();
-
+            
             $table->timestamps(); //bawaan laravel
         });
     }

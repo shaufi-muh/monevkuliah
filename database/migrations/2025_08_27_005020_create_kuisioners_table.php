@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('kuisioners', function (Blueprint $table) {
             $table->id();
 
-            $table->string('sesi'); //Contoh: "Evaluasi Tengah Semester Ganjil 2025"
+            $table->enum('sesi', ['Tengah', 'Akhir']); //Contoh: "Evaluasi Tengah Semester Ganjil 2025"
             $table->text('deskripsi')->nullable();
             $table->enum('status', ['aktif', 'tidak_aktif'])->default('tidak_aktif');
 

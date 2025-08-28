@@ -18,9 +18,13 @@ return new class extends Migration
             $table->foreignId('dosen_id')->constrained('dosens');
             $table->foreignId('matakuliah_id')->constrained('mata_kuliahs');
 
-            // Isi jawaban
-            $table->enum('jawaban_pilihan', ['sesuai', 'tidak_sesuai'])->nullable();
-            $table->text('jawaban_deskripsi')->nullable();
+            $table->integer('real_pertemuan');
+            // Menggunakan tipe data boolean untuk jawaban ya/tidak.
+            // Di database ini akan menjadi TINYINT(1).
+            $table->boolean('jawaban_boolean');
+
+            // Kolom deskripsi tetap ada untuk pertanyaan esai
+            $table->text('keterangan')->nullable();
 
             $table->timestamps();
         });
