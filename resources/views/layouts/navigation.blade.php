@@ -10,12 +10,30 @@
                     </a>
                 </div>
 
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                <!-- Navigation Links BAWAAN LARAVEL --> 
+             <!--   <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                </div>
+                </div> -->
+                <!-- Navigation Links BUATAN -->
+                @if(auth()->user()->role === 'prodi')
+            <!--    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex"> bawaan laravel breeze horizontal -->
+                <div class="flex flex-col space-y-2 mt-4 px-4">
+                    <x-nav-link :href="route('prodi.dashboard')" :active="request()->routeIs('prodi.dashboard')">
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('prodi.dosen.index')" :active="request()->routeIs('prodi.dosen.*')">
+                        {{ __('Kelola Dosen') }}
+                    </x-nav-link>
+
+                    <x-nav-link :href="route('prodi.matakuliah.index')" :active="request()->routeIs('prodi.matakuliah.*')">
+                        {{ __('Mata Kuliah') }}
+                    </x-nav-link>
+                    
+                    </div>
+            @endif
             </div>
 
             <!-- Settings Dropdown -->
