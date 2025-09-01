@@ -22,6 +22,8 @@ class User extends Authenticatable
         'email',
         'password',
         'role', //tambahan
+        //'jurusan_id',
+        //'prodi_id',
     ];
 
     /**
@@ -45,5 +47,21 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    /**
+     * Relasi User ke Jurusan.
+     */
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class, 'jurusan_id');
+    }
+
+    /**
+     * Relasi User ke Prodi.
+     */
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class, 'prodi_id');
     }
 }
