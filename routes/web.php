@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Prodi\DosenController; // Sesuaikan dengan lokasi controller Anda
+use App\Http\Controllers\Prodi\MataKuliahController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -16,8 +18,6 @@ Route::get('/dashboard', function () {
         return redirect()->route('jurusan.dashboard');
     } elseif ($user->role === 'prodi') {
         return redirect()->route('prodi.dashboard');
-    } elseif ($user->role === 'asesor') {
-        return redirect()->route('asesor.dashboard');
     }
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
@@ -41,6 +41,10 @@ Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->grou
     Route::get('/dashboard', function () {
         return view('prodi.dashboard'); // Buat view di resources/views/prodi/dashboard.blade.php
     })->name('dashboard');
+
+    Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
+    Route::post('/dosen', [DosenController::class, 'store'])->name('dosen.store');
+    Route::get('/matakuliah', [MataKuliahController::class, 'index'])->name('matakuliah.index');
     // Tambahkan rute prodi lainnya di sini
 });
 

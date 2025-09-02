@@ -12,5 +12,6 @@ class MataKuliah extends Model
         'kode_matkul',
         'nama_matkul',
         'sks',
+        'semester',
     ];
 }

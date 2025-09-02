@@ -106,10 +106,11 @@
             @endisset
 
             Page Content -->
-            --}}
+            
             <main>
                 {{ $slot }}
             </main>
+            --}}
         </div>
     </body>
 </html>

@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('nip')->nullable();
             $table->string('nuptk')->nullable();
             $table->string('nama_dosen');
-            $table->string('homebase')->nullable();
-
+            //$table->string('homebase')->nullable();
+            $table->foreignId('prodi_id')->constrained('prodis'); // <-- Ganti dengan ini
             $table->timestamps();
         });
     }

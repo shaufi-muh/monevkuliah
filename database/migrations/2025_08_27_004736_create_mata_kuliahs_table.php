@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('kode_matkul');
             $table->string('nama_matkul');
             $table->string('sks');
+            $table->integer('semester'); // <-- Tambahkan ini (misal diisi: 1, 2, 3, dst.)
             
             $table->timestamps();
         });
