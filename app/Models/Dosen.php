@@ -14,9 +14,9 @@ class Dosen extends Model
      * @var array<int, string>
      */
     protected $fillable = [
+        'nama_dosen',
         'nip',
         'nuptk',
-        'nama_dosen',
         //'homebase',
         'prodi_id',
     ];
