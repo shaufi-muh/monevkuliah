@@ -43,14 +43,11 @@ Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->grou
     })->name('dashboard');
 
 
-    // Rute untuk mengelola semua data Dosen (CRUD)
-    // Baris ini akan otomatis membuat rute prodi.dosen.index, prodi.dosen.create, dll.
     Route::resource('dosen', DosenController::class);
-
-    // Anda bisa menambahkan resource lain di sini nanti, contoh:
     Route::resource('matakuliah', MataKuliahController::class);
-
-
+    //Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
+    //Route::post('/dosen', [DosenController::class, 'store'])->name('dosen.store');
+    //Route::get('/matakuliah', [MataKuliahController::class, 'index'])->name('matakuliah.index');
 
     // Tambahkan rute prodi lainnya di sini
 });
