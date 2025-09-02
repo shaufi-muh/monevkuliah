@@ -16,6 +16,7 @@
     </head>
     <body class="font-sans antialiased">
 
+
         <!--<div class="min-h-screen bg-gray-100 flex"> div bawaan breeze-->
         <div x-data="{ open: false }" class="min-h-screen bg-gray-100 flex"> 
             <aside class="w-64 bg-white shadow-md fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 ease-in-out" :class="open ? 'translate-x-0' : '-translate-x-full'" x-cloak>
@@ -27,10 +28,12 @@
                 @click="open = false"
                 class="fixed inset-0 bg-black bg-opacity-50 z-20"
             ></div>
+
             <div class="flex-1 flex flex-col">
 
                     @if (isset($header))
                         <header class="bg-white shadow">
+
                             <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                                 <!-- Hamburger -->
                                 <div class="-me-2 flex items-center">  <!--sm:hidden-->
@@ -80,6 +83,7 @@
                                     </x-dropdown>
                                 </div>
 
+
                             </div>
                         </header>
                     @endif
@@ -96,7 +100,6 @@
         <!--    @include('layouts.navigation') --> 
         <!--
              Page Heading 
-
             @isset($header)
                 <header class="bg-white dark:bg-gray-800 shadow">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
@@ -105,6 +108,7 @@
                 </header>
             @endisset
 
+
             Page Content -->
             
             <main>
@@ -112,5 +116,6 @@
             </main>
             --}}
         </div>
+        --}}
     </body>
 </html>

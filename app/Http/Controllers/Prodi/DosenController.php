@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Prodi;
 
 use App\Http\Controllers\Controller;
+
 use App\Models\Dosen; // <-- Import model Dosen
 use App\Models\Prodi; // <-- Import model Prodi
+
 use Illuminate\Http\Request;
 
 class DosenController extends Controller
@@ -14,6 +16,7 @@ class DosenController extends Controller
      */
     public function index()
     {
+
         // Ambil semua data prodi untuk ditampilkan di dropdown form
         $prodis = Prodi::orderBy('nama_prodi', 'asc')->get();
 
@@ -22,6 +25,7 @@ class DosenController extends Controller
 
         // Kirim data prodi dan dosen ke view
         return view('prodi.dosen.index', compact('prodis', 'dosens'));
+
     }
 
     /**
@@ -37,6 +41,7 @@ class DosenController extends Controller
      */
     public function store(Request $request)
     {
+
         // 1. Validasi Input
         $request->validate([
             'nama_dosen' => 'required|string|max:255',
@@ -56,6 +61,7 @@ class DosenController extends Controller
         // 3. Redirect kembali ke halaman index dengan pesan sukses
         return redirect()->route('prodi.dosen.index')
                          ->with('success', 'Data dosen berhasil ditambahkan.');
+
     }
 
     /**

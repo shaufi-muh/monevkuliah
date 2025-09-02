@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Prodi\DosenController; // Sesuaikan dengan lokasi controller Anda
+use App\Http\Controllers\Prodi\DosenController;
 use App\Http\Controllers\Prodi\MataKuliahController;
 
 Route::get('/', function () {
@@ -42,9 +42,16 @@ Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->grou
         return view('prodi.dashboard'); // Buat view di resources/views/prodi/dashboard.blade.php
     })->name('dashboard');
 
-    Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
-    Route::post('/dosen', [DosenController::class, 'store'])->name('dosen.store');
-    Route::get('/matakuliah', [MataKuliahController::class, 'index'])->name('matakuliah.index');
+
+    // Rute untuk mengelola semua data Dosen (CRUD)
+    // Baris ini akan otomatis membuat rute prodi.dosen.index, prodi.dosen.create, dll.
+    Route::resource('dosen', DosenController::class);
+
+    // Anda bisa menambahkan resource lain di sini nanti, contoh:
+    Route::resource('matakuliah', MataKuliahController::class);
+
+
+
     // Tambahkan rute prodi lainnya di sini
 });
 
