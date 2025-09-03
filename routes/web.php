@@ -3,7 +3,9 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Prodi\DosenController;
+use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -44,7 +46,9 @@ Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->grou
 
 
     Route::resource('dosen', DosenController::class);
+    Route::resource('mahasiswa', MahasiswaController::class);
     Route::resource('matakuliah', MataKuliahController::class);
+    
     //Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
     //Route::post('/dosen', [DosenController::class, 'store'])->name('dosen.store');
     //Route::get('/matakuliah', [MataKuliahController::class, 'index'])->name('matakuliah.index');

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Prodi;
 
 use App\Http\Controllers\Controller;
+use App\Models\MataKuliah; // <-- Import model
 use Illuminate\Http\Request;
 
 class MataKuliahController extends Controller
@@ -12,7 +13,8 @@ class MataKuliahController extends Controller
      */
     public function index()
     {
-        //
+        $mata_kuliahs = MataKuliah::latest()->paginate(10);
+        return view('prodi.matakuliah.index', compact('mata_kuliahs'));
     }
 
     /**
@@ -28,7 +30,19 @@ class MataKuliahController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // Validasi
+        $request->validate([
+            'kode_matkul' => 'required|string|max:10|unique:mata_kuliahs,kode_matkul',
+            'nama_matkul' => 'required|string|max:255',
+            'sks' => 'required|integer|min:1|max:6',
+            'semester' => 'required|integer|min:1|max:8',
+        ]);
+
+        // Simpan ke DB
+        MataKuliah::create($request->all());
+
+        return redirect()->route('prodi.matakuliah.index')
+                         ->with('success', 'Mata kuliah berhasil ditambahkan.');
     }
 
     /**
@@ -42,24 +56,37 @@ class MataKuliahController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(MataKuliah $matakuliah)
     {
-        //
+        return view('prodi.matakuliah.edit', compact('matakuliah'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, MataKuliah $matakuliah)
     {
-        //
+        $request->validate([
+            'kode_matkul' => 'required|string|max:10|unique:mata_kuliahs,kode_matkul,' . $matakuliah->id,
+            'nama_matkul' => 'required|string|max:255',
+            'sks' => 'required|integer|min:1|max:6',
+            'semester' => 'required|integer|min:1|max:8',
+        ]);
+
+        $matakuliah->update($request->all());
+
+        return redirect()->route('prodi.matakuliah.index')
+                        ->with('success', 'Mata kuliah berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
-    {
-        //
-    }
+    public function destroy(MataKuliah $matakuliah)
+{
+    $matakuliah->delete();
+
+    return redirect()->route('prodi.matakuliah.index')
+                     ->with('success', 'Mata kuliah berhasil dihapus.');
+}
 }
