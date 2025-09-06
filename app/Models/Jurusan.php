@@ -13,4 +13,10 @@ class Jurusan extends Model
         'kode_jurusan',
         'akronim_jurusan',
     ];
+
+    // Relasi: satu Jurusan punya banyak Prodi
+    public function prodi()
+    {
+        return $this->hasMany(Prodi::class);
+    }
 }

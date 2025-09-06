@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Jurusan\DataProdiController;
+use App\Http\Controllers\Jurusan\UserProdiController;
 use App\Http\Controllers\Prodi\DosenController;
 use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
@@ -36,6 +38,9 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
         return view('jurusan.dashboard'); // Buat view di resources/views/jurusan/dashboard.blade.php
     })->name('dashboard');
     // Tambahkan rute jurusan lainnya di sini
+
+    Route::resource('dataprodi', DataProdiController::class);
+    Route::resource('userprodi', UserProdiController::class);
 });
 
 // Grup Rute untuk PRODI
