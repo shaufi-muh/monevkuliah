@@ -18,13 +18,11 @@ class UserSeeder extends Seeder
             ['nama_jurusan' => 'Komputer dan Bisnis'],
             ['kode_jurusan' => 'Jur01', 'akronim_jurusan' => 'Kombis']
         );
-
         // 2. Buat atau cari Prodi, dan simpan hasilnya dalam variabel $prodi
         $prodi = Prodi::firstOrCreate(
             ['nama_prodi' => 'Teknologi Rekayasa Komputer Jaringan'],
-            ['kode_prodi' => 'Prodi01', 'akronim_prodi' => 'TRKJ']
+            ['kode_prodi' => 'Prodi01', 'akronim_prodi' => 'TRKJ', 'jurusan_id' => $jurusan->id,]
         );
-
         // 3. Buat user Jurusan, gunakan $jurusan->id yang PASTI ada
         User::firstOrCreate(
             ['email' => 'kombis@example.com'],
@@ -35,7 +33,6 @@ class UserSeeder extends Seeder
                 'jurusan_id' => $jurusan->id, // <-- Terhubung langsung, tidak mencari lagi
             ]
         );
-
         // 4. Buat user Prodi, gunakan $prodi->id yang PASTI ada
         User::firstOrCreate(
             ['email' => 'trkj@example.com'],
@@ -43,10 +40,10 @@ class UserSeeder extends Seeder
                 'name' => 'Prodi TRKJ',
                 'password' => Hash::make('password'),
                 'role' => 'prodi',
+                'jurusan_id' => $jurusan->id,
                 'prodi_id' => $prodi->id, // <-- Terhubung langsung, tidak mencari lagi
             ]
         );
-        
     }
 }
 

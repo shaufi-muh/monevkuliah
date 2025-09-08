@@ -17,22 +17,25 @@ class UserProdiController extends Controller
     // Menampilkan daftar semua user prodi
     public function index()
     {
-        // Ambil semua user yang rolenya 'prodi'
-        //$prodis = User::where('role', 'prodi')->get();
-        //return view('jurusan.userprodi.index', compact('prodis'));
-        //------batas syntax baru-------
-        // 1. Dapatkan ID jurusan dari user yang sedang login
+        // Ambil semua data user untuk ditampilkan di tabel
+        $users = User::with('jurusan')->latest()->paginate(5); // Paginate 10 data per halaman
+        
+        // Ambil semua data prodi untuk ditampilkan di dropdown form
+        $prodis = Prodi::orderBy('nama_prodi', 'asc')->get();
+        
+        // Dapatkan ID jurusan dari user yang sedang login
         // Asumsi user jurusan punya relasi atau kolom 'jurusan_id'
         $jurusanId = Auth::user()->jurusan_id; 
-        // 2. Ambil semua user yang role-nya 'prodi' DAN
-        //    prodinya memiliki jurusan_id yang sama dengan user yang login.
-        $usersProdi = User::where('role', 'prodi')
+
+        // Ambil semua user yang role-nya 'prodi' DAN
+        // prodinya memiliki jurusan_id yang sama dengan user yang login.
+        $users = User::where('role', 'prodi')
                           ->whereHas('prodi', function ($query) use ($jurusanId) {
                               $query->where('jurusan_id', $jurusanId);
-                          })->with('prodi')->get();
+                          })->with('prodi')->paginate(5);
 
-        // 3. Kirim data ke view
-        return view('jurusan.userprodi.index', compact('usersProdi'));
+        // Kirim data ke view
+        return view('jurusan.userprodi.index', compact('users', 'prodis'));
     }
 
     /**
@@ -55,30 +58,12 @@ class UserProdiController extends Controller
     // Menyimpan data prodi baru ke database
     public function store(Request $request)
     {
-        /* BATAAAALLLLL
-        // Validasi input
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:users',
-            'password' => 'required|string|min:8|confirmed',
-        ]);
-
-        // Buat user baru
-        User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'prodi', // <-- Set role secara otomatis
-        ]);
-
-        return redirect()->route('prodi.index')->with('success', 'User Prodi berhasil ditambahkan.'); */
-
         // 1. Validasi input
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
-            'prodi_id' => 'required|exists:prodi,id',
+            'prodi_id' => 'required|exists:prodis,id',
         ]);
 
         // 2. Simpan data user baru
@@ -88,10 +73,11 @@ class UserProdiController extends Controller
             'password' => bcrypt($request->password), // Jangan lupa hash password
             'role' => 'prodi', // Hardcode role sebagai 'prodi'
             'prodi_id' => $request->prodi_id,
+            'jurusan_id' => auth()->user()->jurusan_id,
         ]);
         
         // 3. Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('userprodi.index')->with('success', 'User Prodi berhasil ditambahkan.');
+        return redirect()->route('jurusan.userprodi.index')->with('success', 'User Prodi berhasil ditambahkan.');
     }
 
     /**
@@ -126,3 +112,20 @@ class UserProdiController extends Controller
         //
     }
 }
+ /* BATAAAALLLLL
+        // Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
+        ]);
+
+        // Buat user baru
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => 'prodi', // <-- Set role secara otomatis
+        ]);
+
+        return redirect()->route('prodi.index')->with('success', 'User Prodi berhasil ditambahkan.'); */
