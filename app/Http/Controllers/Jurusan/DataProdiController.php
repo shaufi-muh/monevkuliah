@@ -37,7 +37,7 @@ class DataProdiController extends Controller
         $request->validate([
             'nama_prodi' => 'required|string|max:255',
             'kode_prodi' => 'required|string|max:18',
-            'akronim_prodi' => 'nullable|string|max:16|unique:prodis,akronim_prodi',
+            'akronim_prodi' => 'required|string|max:18',
         ]);
 
         // 2. Simpan data ke database
@@ -64,24 +64,46 @@ class DataProdiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Prodi $dataprodi)
     {
-        //
+        // Ambil semua data prodi untuk dropdown
+        $prodis = Prodi::orderBy('nama_prodi', 'asc')->get();
+
+        return view('jurusan.dataprodi.edit', compact('dataprodi','prodis'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Prodi $dataprodi)
     {
-        //
+        $request->validate([
+            'nama_prodi' => 'required|string|max:255',
+            'kode_prodi' => 'required|string|max:18',
+            'akronim_prodi' => 'required|string|max:18',
+        ]);
+        /*$dataprodi->update($request->all()); */
+        // 2. Update data di database
+        $dataprodi->update([
+            'nama_prodi' => $request->nama_prodi,
+            'kode_prodi' => $request->kode_prodi,
+            'akronim_prodi' => $request->akronim_prodi,
+            'jurusan_id' => auth()->user()->jurusan_id,
+        ]);
+        return redirect()->route('jurusan.dataprodi.index')
+                        ->with('success', 'Data Prodi berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Prodi $dataprodi)
     {
-        //
+        // Hapus data
+        $dataprodi->delete();
+
+        // Redirect kembali ke halaman index dengan pesan sukses
+        return redirect()->route('jurusan.dataprodi.index')
+                        ->with('success', 'Data Prodi berhasil dihapus.');
     }
 }

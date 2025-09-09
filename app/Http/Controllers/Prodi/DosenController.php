@@ -79,14 +79,12 @@ class DosenController extends Controller
     {
         // Ambil semua data prodi untuk dropdown
         $prodis = Prodi::orderBy('nama_prodi', 'asc')->get();
-        
+
         // Tampilkan view edit dan kirim data dosen yang akan diedit serta data prodi
         return view('prodi.dosen.edit', compact('dosen', 'prodis'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    
     /**
      * Memperbarui data dosen di database.
      */

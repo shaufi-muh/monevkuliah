@@ -57,7 +57,7 @@
                                 <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
                             </div>
 
-                            <div class="mt-11 items-center justify-end"> <!-- flex items-center justify-end DIHILANGKAN--> 
+                            <div class="mt-11"> <!-- flex items-center justify-end DIHILANGKAN--> 
                                 <x-primary-button>
                                     {{ __('Simpan') }}
                                 </x-primary-button>
