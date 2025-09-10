@@ -8,6 +8,8 @@ use App\Models\Prodi;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash; // <-- Untuk enkripsi password
+use Illuminate\Validation\Rule; // <-- WAJIB TAMBAHKAN INI
+
 
 class UserProdiController extends Controller
 {
@@ -91,25 +93,57 @@ class UserProdiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(User $userprodi) // <-- Gunakan Route Model Binding
     {
-        //
+        // 1. Dapatkan daftar prodi di bawah naungan jurusan ini untuk dropdown
+        $jurusanId = Auth::user()->jurusan_id;
+        $prodis = Prodi::where('jurusan_id', $jurusanId)->orderBy('nama_prodi', 'asc')->get();
+
+        // 2. Kirim data user yang akan di-edit dan daftar prodi ke view
+        return view('jurusan.userprodi.edit', compact('userprodi', 'prodis'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $userprodi) // <-- Gunakan Route Model Binding
     {
-        //
+        // 1. Validasi input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            // Gunakan Rule::unique untuk mengabaikan email user saat ini
+            'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($userprodi->id)],
+            'prodi_id' => 'required|exists:prodis,id',
+            'password' => 'nullable|string|min:8|confirmed', // Password boleh kosong (nullable)
+        ]);
+
+        // 2. Update data pada model user
+        $userprodi->name = $request->name;
+        $userprodi->email = $request->email;
+        $userprodi->prodi_id = $request->prodi_id;
+
+        // 3. Cek jika field password diisi, maka update password
+        if ($request->filled('password')) {
+            $userprodi->password = Hash::make($request->password);
+        }
+
+        // 4. Simpan perubahan
+        $userprodi->save();
+
+        // 5. Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('jurusan.userprodi.index')->with('success', 'Data User Prodi berhasil diperbarui.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $userprodi) // <-- Gunakan Route Model Binding
     {
-        //
+        // Hapus data user
+        $userprodi->delete();
+
+        // Redirect ke halaman index dengan pesan sukses
+        return redirect()->route('jurusan.userprodi.index')->with('success', 'User Prodi berhasil dihapus.');
     }
 }
  /* BATAAAALLLLL
