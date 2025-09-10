@@ -10,9 +10,19 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
 
+                    {{-- Pesan SUKSES akan memiliki background HIJAU --}}
                     @if (session('success'))
-                        <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4" role="alert">
+                        <div class="mb-4 rounded-lg bg-green-100 px-4 py-3 text-green-700 border border-green-400" role="alert">
+                            <strong class="font-bold">Berhasil!</strong>
                             <span class="block sm:inline">{{ session('success') }}</span>
+                        </div>
+                    @endif
+
+                    {{-- Pesan ERROR akan memiliki background MERAH --}}
+                    @if (session('error'))
+                        <div class="mb-4 rounded-lg bg-red-100 px-4 py-3 text-red-700 border border-red-400" role="alert">
+                            <strong class="font-bold">Gagal!</strong>
+                            <span class="block sm:inline">{{ session('error') }}</span>
                         </div>
                     @endif
 
@@ -99,6 +109,8 @@
                     <div class="mt-4">
                         {{ $prodis->links() }}
                     </div>
+
+                    
                 </div>
             </div>
         </div>

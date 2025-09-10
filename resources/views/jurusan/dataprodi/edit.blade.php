@@ -13,36 +13,12 @@
                     <form action="{{ route('jurusan.dataprodi.update', $dataprodi->id) }}" method="POST">
                         @csrf
                         @method('PATCH') <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                            <label for="nama_prodi" class="block font-medium text-sm text-gray-700">Nama Prodi</label>
-                            <input type="text" name="nama_prodi" id="nama_prodi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" 
-                                value="{{ old('nama_prodi', $dataprodi->nama_prodi) }}" required>
-                            @error('nama_prodi') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                        </div>    
-                       <!-- <div>
+                            <div>
                                 <label for="nama_prodi" class="block font-medium text-sm text-gray-700">Nama Prodi</label>
-                                    <select name="nama_prodi" id="nama_prodi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                                        <option value="">Pilih Prodi</option>
-                                        @foreach ($prodis as $prodi)
-                                            <option value="{{ $prodi->nama_prodi}}" @selected(old('nama_prodi', $dataprodi->id) == $prodi->id)>
-                                                {{ $prodi->nama_prodi }}
-                                            </option>
-                                        @endforeach
-                                 </select>
-                                <select name="nama_prodi" id="nama_prodi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
-                                    <option value="">Pilih Prodi</option>
-                                    
-                                    {{-- Gunakan variabel baru: $prodi_option --}}
-                                    @foreach ($prodis as $prodi_option)
-                                        <option value="{{ $prodi_option->id }}" 
-                                                @selected(old('nama_prodi', $prodi_option->nama_prodi) == $prodi_option->nama_prodi)>
-                                            {{ $prodi_option->nama_prodi }}
-                                        </option>
-                                    @endforeach
-                                    
-                                </select> 
-                                @error('prodi_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
-                            </div> -->
+                                <input type="text" name="nama_prodi" id="nama_prodi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" 
+                                    value="{{ old('nama_prodi', $dataprodi->nama_prodi) }}" required>
+                                @error('nama_prodi') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>    
 
                             <div>
                                 <label for="kode_prodi" class="block font-medium text-sm text-gray-700">Kode Prodi</label>

@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Jurusan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Prodi;
+use App\Models\Dosen;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DataProdiController extends Controller
@@ -99,11 +101,17 @@ class DataProdiController extends Controller
      */
     public function destroy(Prodi $dataprodi)
     {
-        // Hapus data
+        // 1. Cek apakah prodi ini masih memiliki dosen yang terhubung
+        if ($dataprodi->dosens()->exists() || $dataprodi->users()->exists()) {
+            // 2. Jika masih ada, JANGAN HAPUS. Kembalikan ke halaman sebelumnya dengan pesan error.
+            return back()->with('error', 'Program Studi ini tidak dapat dihapus karena masih memiliki data dosen atau data user.');
+        }
+
+        // 3. Jika sudah tidak ada dosen dan data user, baru hapus data prodi
         $dataprodi->delete();
 
-        // Redirect kembali ke halaman index dengan pesan sukses
+        // 4. Redirect dengan pesan sukses
         return redirect()->route('jurusan.dataprodi.index')
-                        ->with('success', 'Data Prodi berhasil dihapus.');
+            ->with('success', 'Data Prodi berhasil dihapus.');
     }
 }

@@ -21,8 +21,17 @@ class Prodi extends Model
     }
     
     // Relasi: satu Prodi bisa punya satu user pengelola
-    public function user()
+    public function users()
     {
         return $this->hasOne(User::class);
+    }
+
+    /**
+     * Mendefinisikan relasi "one-to-many" ke model Dosen.
+     * Sebuah Prodi memiliki banyak Dosen.
+     */
+    public function dosens()
+    {
+        return $this->hasMany(Dosen::class);
     }
 }
