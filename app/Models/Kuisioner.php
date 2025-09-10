@@ -9,8 +9,23 @@ class Kuisioner extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'sesi',
+        'tahun_akademik', // baru
+        'semester',       // baru
+        'sesi',           
         'diskripsi',
         'status',
+        'jurusan_id', // Pastikan ini ada
     ];
+
+    // Relasi: Satu Kuisioner dimiliki oleh satu Jurusan
+    public function jurusan()
+    {
+        return $this->belongsTo(Jurusan::class);
+    }
+     
+    // Relasi: Satu Kuisioner memiliki banyak Pertanyaan
+    public function pertanyaans()
+    {
+        return $this->hasMany(Pertanyaan::class);
+    }
 }

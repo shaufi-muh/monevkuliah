@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Jurusan\DataProdiController;
 use App\Http\Controllers\Jurusan\UserProdiController;
+use App\Http\Controllers\Jurusan\KuisionerController;
 use App\Http\Controllers\Prodi\DosenController;
 use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
@@ -41,6 +42,8 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
 
     Route::resource('dataprodi', DataProdiController::class);
     Route::resource('userprodi', UserProdiController::class);
+    Route::resource('kuisioner', KuisionerController::class); // <-- Tambahkan ini
+
 });
 
 // Grup Rute untuk PRODI
