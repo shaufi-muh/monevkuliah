@@ -33,7 +33,13 @@ class KuisionerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'tahun_akademik' => 'required|string',
+           // 'tahun_akademik' => 'required|string|max:9|regex:/^\d{4}\/\d{4}$/',
+            'tahun_akademik' => [
+                'required',
+                'string',
+                'max:9',
+                'regex:/^\d{4}\/\d{4}$/'
+            ],
             'semester' => 'required|in:Ganjil,Genap',
             'sesi' => 'required|in:Tengah,Akhir',
             'deskripsi' => 'nullable|string',

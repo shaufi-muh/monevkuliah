@@ -15,7 +15,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <x-input-label for="tahun_akademik" :value="__('Tahun Akademik')" />
-                                <x-text-input id="tahun_akademik" class="block mt-1 w-full" type="number" name="tahun_akademik" :value="old('tahun_akademik', date('Y'))" required />
+                                <x-text-input id="tahun_akademik" class="block mt-1 w-full" name="tahun_akademik" :value="old('tahun_akademik')" required /> <!-- type="number" , date('Y') --> 
                                 <x-input-error :messages="$errors->get('tahun_akademik')" class="mt-2" />
                             </div>
                             <div>
