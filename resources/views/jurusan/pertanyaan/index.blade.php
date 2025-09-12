@@ -40,15 +40,7 @@
                         <div class="mb-4 p-4 bg-green-100 ...">{{ session('success') }}</div>
                     @endif
 
-              <!--      {{-- Loop untuk setiap Set Kuisioner (Wadah) --}}
-                    ($kuisioners as $kuisioner)
-                        <div class="mb-6 p-4 border rounded-lg">      ****MENAMPILKAN SEMUA MAP KUISIONER PERTANYAAN*******
-                            <h3 class="font-semibold text-lg text-gray-800">
-                                {{ $kuisioner->sesi }} Semester {{ $kuisioner->semester }} {{ $kuisioner->tahun_akademik }}
-                            </h3>
-                            <p class="text-sm text-gray-500 mb-3">{{ $kuisioner->deskripsi }}</p> 
-                            
-                            -->
+             
 
                     {{-- Tampilkan tabel HANYA jika ada kuisioner yang dipilih --}}
                     @if($selectedKuisioner)
