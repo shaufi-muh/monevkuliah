@@ -21,9 +21,9 @@
                             </div>    
 
                             <div>
-                                <label for="kode_prodi" class="block font-medium text-sm text-gray-700">Kode Prodi</label>
-                                <input type="text" name="kode_prodi" id="kode_prodi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" value="{{ old('kode_prodi', $dataprodi->kode_prodi) }}">
-                                @error('kode_prodi') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                <label for="jenjang_pendidikan" class="block font-medium text-sm text-gray-700">Jenjang Pendidikan</label>
+                                <input type="text" name="jenjang_pendidikan" id="jenjang_pendidikan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" value="{{ old('jenjang_pendidikan', $dataprodi->jenjang_pendidikan) }}">
+                                @error('jenjang_pendidikan') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>                        
 
                             <div>

@@ -37,9 +37,9 @@
                             </div>
 
                             <div>
-                                <label for="kode_prodi" class="block font-medium text-sm text-gray-700">Kode Prodi</label>
-                                <input type="text" name="kode_prodi" id="kode_prodi" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" value="{{ old('kode_prodi') }}" required>
-                                @error('kode_prodi') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                <label for="jenjang_pendidikan" class="block font-medium text-sm text-gray-700">Jenjang Pendidikan</label>
+                                <input type="text" name="jenjang_pendidikan" id="jenjang_pendidikan" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" value="{{ old('jenjang_pendidikan') }}" required>
+                                @error('jenjang_pendidikan') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
 
                             <div>
@@ -64,7 +64,7 @@
                             <thead class="bg-gray-50">
                                 <tr>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Prodi</th>
-                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kode Prodi</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Jenjang Pendidikan</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Akronim Prodi</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                 </tr>
@@ -73,7 +73,7 @@
                                 @forelse ($prodis as $prodi)
                                     <tr>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $prodi->nama_prodi }}</td>
-                                        <td class="px-6 py-4 whitespace-nowrap">{{ $prodi->kode_prodi ?? '-' }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $prodi->jenjang_pendidikan ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $prodi->akronim_prodi  }}</td>
                 
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">

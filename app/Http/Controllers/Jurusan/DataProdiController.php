@@ -38,14 +38,14 @@ class DataProdiController extends Controller
         // 1. Validasi Input
         $request->validate([
             'nama_prodi' => 'required|string|max:255',
-            'kode_prodi' => 'required|string|max:18',
+            'jenjang_pendidikan' => 'required|string|max:18',
             'akronim_prodi' => 'required|string|max:18',
         ]);
 
         // 2. Simpan data ke database
         Prodi::create([
             'nama_prodi' => $request->nama_prodi,
-            'kode_prodi' => $request->kode_prodi,
+            'jenjang_pendidikan' => $request->jenjang_pendidikan,
             'akronim_prodi' => $request->akronim_prodi,
             'jurusan_id' => auth()->user()->jurusan_id,
         ]);
@@ -81,14 +81,13 @@ class DataProdiController extends Controller
     {
         $request->validate([
             'nama_prodi' => 'required|string|max:255',
-            'kode_prodi' => 'required|string|max:18',
+            'jenjang_pendidikan' => 'required|string|max:18',
             'akronim_prodi' => 'required|string|max:18',
         ]);
-        /*$dataprodi->update($request->all()); */
         // 2. Update data di database
         $dataprodi->update([
             'nama_prodi' => $request->nama_prodi,
-            'kode_prodi' => $request->kode_prodi,
+            'jenjang_pendidikan' => $request->jenjang_pendidikan,
             'akronim_prodi' => $request->akronim_prodi,
             'jurusan_id' => auth()->user()->jurusan_id,
         ]);
