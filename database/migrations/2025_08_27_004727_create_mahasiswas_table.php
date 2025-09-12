@@ -13,7 +13,11 @@ return new class extends Migration
     {
         Schema::create('mahasiswas', function (Blueprint $table) {
             $table->id(); // bawaaan laravel
-
+            $table->foreignId('prodi_id')
+                  ->after('id')
+                  ->constrained('prodis')
+                  ->onUpdate('cascade')
+                  ->onDelete('cascade');
             $table->string('nim')->unique();
             $table->string('nama', 150);
             $table->string('email')->unique();

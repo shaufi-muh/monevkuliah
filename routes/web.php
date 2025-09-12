@@ -7,6 +7,8 @@ use App\Http\Controllers\Jurusan\UserProdiController;
 use App\Http\Controllers\Prodi\DosenController;
 use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
+use App\Http\Controllers\Prodi\KelasController;
+use App\Http\Controllers\Prodi\IsiKelasController;
 
 
 Route::get('/', function () {
@@ -53,6 +55,12 @@ Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->grou
     Route::resource('dosen', DosenController::class);
     Route::resource('mahasiswa', MahasiswaController::class);
     Route::resource('matakuliah', MataKuliahController::class);
+    Route::resource('datakelas', KelasController::class)->parameters(['datakelas' => 'kela']);
+
+    Route::get('isikelas', [IsiKelasController::class, 'index'])->name('isikelas.index');
+    Route::get('isikelas/{kelas}', [IsiKelasController::class, 'show'])->name('isikelas.show');
+    Route::post('isikelas/{kelas}/add', [IsiKelasController::class, 'addMahasiswa'])->name('isikelas.add');
+    Route::post('isikelas/{kelas}/remove', [IsiKelasController::class, 'removeMahasiswa'])->name('isikelas.remove');
     
     //Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
     //Route::post('/dosen', [DosenController::class, 'store'])->name('dosen.store');

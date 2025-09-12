@@ -9,14 +9,7 @@ use Illuminate\Database\Eloquent\Model; // Class dasar untuk semua model di Lara
 class Mahasiswa extends Model
 {
     use HasFactory;
-       
-    /**
-     * (3) Mass Assignment Protection ($fillable)
-     * Properti ini SANGAT PENTING untuk keamanan.
-     * Ini adalah "daftar putih" kolom-kolom mana saja yang boleh diisi
-     * secara massal menggunakan metode seperti `Mahasiswa::create([...])`.
-     * Kolom 'id', 'created_at', dan 'updated_at' tidak perlu dimasukkan di sini.
-     */
+    
     protected $fillable = [
         'nim',
         'nama',
@@ -24,20 +17,13 @@ class Mahasiswa extends Model
         'no_telp',
     ];
 
-    /**
-     * (Opsional) Menentukan nama tabel secara eksplisit.
-     * Laravel biasanya sudah pintar menebak nama tabel (mahasiswas),
-     * tapi jika nama tabel Anda tidak sesuai standar, Anda bisa menentukannya di sini.
-     *
-     * protected $table = 'tabel_mahasiswa';
-     */
+    public function kelas()
+    {
+        return $this->belongsToMany(Kelas::class, 'kelas_mahasiswa');
+    }
 
-    /**
-     * (Opsional) Menentukan primary key jika bukan 'id'.
-     * Jika Anda ingin 'nim' menjadi primary key, Anda bisa tambahkan ini.
-     *
-     * protected $primaryKey = 'nim';
-     * public $incrementing = false;
-     * protected $keyType = 'string';
-     */
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class);
+    }
 }

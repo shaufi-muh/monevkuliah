@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('kelas', function (Blueprint $table) {
             $table->id();
 
-            $table->char('grup_kelas',1);
-            $table->string('nama_kelas');
+            $table->foreignId('prodi_id')->constrained('prodis');
+            $table->integer('urutan_semester');
+            $table->char('grup_kelas', 1);
+            $table->string('nama_kelas')->unique(); // cth: TRKJ-1A
             
             $table->timestamps();
         });

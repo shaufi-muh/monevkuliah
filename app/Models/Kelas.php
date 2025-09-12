@@ -9,8 +9,19 @@ class Kelas extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'grup_kelas',
         'prodi_id',
-        'nama_kelas',
+        'urutan_semester',
+        'grup_kelas',
+        'nama_kelas'
     ];
+
+    public function mahasiswas()
+    {
+        return $this->belongsToMany(Mahasiswa::class, 'kelas_mahasiswa');
+    }
+
+    public function prodi()
+    {
+        return $this->belongsTo(Prodi::class);
+    }
 }
