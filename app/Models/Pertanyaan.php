@@ -9,7 +9,9 @@ class Pertanyaan extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'kuisioner_id',
+        'kuisioner_id', // <-- PASTIKAN INI ADA
         'isi_pertanyaan',
+        'tipe_jawaban',
+        'urutan',
     ];
 }

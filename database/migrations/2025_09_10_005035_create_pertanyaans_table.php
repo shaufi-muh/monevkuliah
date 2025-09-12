@@ -11,22 +11,23 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('kuisioners', function (Blueprint $table) {
+        Schema::create('pertanyaans', function (Blueprint $table) {
             $table->id();
-
-            $table->enum('sesi', ['Tengah', 'Akhir']); //Contoh: "Evaluasi Tengah Semester Ganjil 2025"
-            $table->text('deskripsi')->nullable();
-            $table->enum('status', ['aktif', 'tidak_aktif'])->default('tidak_aktif');
-
+            
+            $table->foreignId('kuisioner_id')->constrained('kuisioners')->onDelete('cascade');
+            $table->text('isi_pertanyaan');
+            $table->enum('tipe_jawaban', ['numerik', 'boolean']);
+            $table->integer('urutan')->default(0);
+            
             $table->timestamps();
         });
     }
-
+ 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('kuisioners');
+        Schema::dropIfExists('pertanyaans');
     }
 };
