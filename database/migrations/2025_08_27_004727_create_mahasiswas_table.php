@@ -14,7 +14,6 @@ return new class extends Migration
         Schema::create('mahasiswas', function (Blueprint $table) {
             $table->id(); // bawaaan laravel
             $table->foreignId('prodi_id')
-                  ->after('id')
                   ->constrained('prodis')
                   ->onUpdate('cascade')
                   ->onDelete('cascade');
@@ -22,7 +21,6 @@ return new class extends Migration
             $table->string('nama', 150);
             $table->string('email')->unique();
             $table->string('no_telp')->nullable();
-            
             $table->timestamps(); //bawaan laravel
         });
     }
