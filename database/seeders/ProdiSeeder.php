@@ -1,24 +1,21 @@
 <?php
-
 namespace Database\Seeders;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Prodi; // <-- Pastikan model PRodi di-import
+use App\Models\Prodi;
 
 class ProdiSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Langsung membuat 1 data Prodi tanpa factory
-        PRodi::create([
-            'nama_prodi' => 'Teknologi Rekayasa Komputer Jaringan',
-            'kode_prodi' => 'Prodi01',
-            'akronim_prodi' => 'TRKJ', // <-- Tambahkan kolom lain jika ada dan dibutuhkan
-            // Pastikan kolom 'nama_prodi' ada di migrasi tabel prodis Anda
-        ]);
+        $data = [
+            ['nama_prodi' => 'Teknologi Rekayasa Komputer Jaringan', 'jenjang_pendidikan' => 'D4', 'akronim_prodi' => 'TRKJ', 'jurusan_id' => 1],
+            ['nama_prodi' => 'Teknologi Informasi', 'jenjang_pendidikan' => 'D3', 'akronim_prodi' => 'TI', 'jurusan_id' => 1],
+            ['nama_prodi' => 'Agroindustri', 'jenjang_pendidikan' => 'D3', 'akronim_prodi' => 'AI', 'jurusan_id' => 2],
+            ['nama_prodi' => 'Teknologi Pakan Ternak', 'jenjang_pendidikan' => 'D4', 'akronim_prodi' => 'TPT', 'jurusan_id' => 2],
+            ['nama_prodi' => 'Teknologi Rekayasa Pemeliharaan Alat Berat', 'jenjang_pendidikan' => 'D4', 'akronim_prodi' => 'TRPAB', 'jurusan_id' => 3],
+        ];
+        foreach ($data as $item) {
+            Prodi::create($item);
+        }
     }
 }

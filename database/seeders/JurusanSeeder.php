@@ -1,24 +1,20 @@
 <?php
-
 namespace Database\Seeders;
-
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Jurusan; // <-- Pastikan model Jurusan di-import
+use App\Models\Jurusan;
 
 class JurusanSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
     public function run(): void
     {
-        // Langsung membuat 1 data Jurusan tanpa factory
-        Jurusan::create([
-            'nama_jurusan' => 'Komputer dan Bisnis',
-            'kode_jurusan' => 'Jur01',
-            'akronim_jurusan' => 'Kombis', // <-- Tambahkan kolom lain jika ada dan dibutuhkan
-            // Pastikan kolom 'nama_jurusan' ada di migrasi tabel jurusans Anda
-        ]);
+        $data = [
+            ['nama_jurusan' => 'Komputer dan Bisnis', 'kode_jurusan' => 'Jur01', 'akronim_jurusan' => 'Kombis'],
+            ['nama_jurusan' => 'Teknologi Industri Pertanian', 'kode_jurusan' => 'Jur02', 'akronim_jurusan' => 'TIP'],
+            ['nama_jurusan' => 'Rekayasa dan Industri', 'kode_jurusan' => 'Jur03', 'akronim_jurusan' => 'RI'],
+           
+        ];
+        foreach ($data as $item) {
+            Jurusan::create($item);
+        }
     }
 }
