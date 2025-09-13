@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+        <title>{{ config('app.name', 'MONEV KULIAH') }}</title>
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
@@ -19,7 +19,7 @@
 
         <!--<div class="min-h-screen bg-gray-100 flex"> div bawaan breeze-->
         <div x-data="{ open: false }" class="min-h-screen bg-gray-100 flex"> 
-            <aside class="w-64 bg-white shadow-md fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 ease-in-out" :class="open ? 'translate-x-0' : '-translate-x-full'" x-cloak>
+            <aside class="w-64 bg-white shadow-md fixed inset-y-0 left-0 z-30 transform transition-transform duration-300 ease-in-out pt-20" :class="open ? 'translate-x-0' : '-translate-x-full'" x-cloak>
                 @include('layouts.navigation')
             </aside>
             <div
@@ -32,7 +32,7 @@
             <div class="flex-1 flex flex-col">
 
                     @if (isset($header))
-                        <header class="bg-white shadow">
+                        <header class="bg-blue-800 shadow sticky top-0 z-50">
 
                             <div class="max-w-7xl mx-auto py-4 px-4 sm:px-6 lg:px-8 flex justify-between items-center">
                                 <!-- Hamburger -->
@@ -45,7 +45,7 @@
                                     </button>
                                 </div>
 
-                                <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+                                <h2 class="font-semibold text-xl text-white leading-tight text-center" style="margin-left:-0.5rem;margin-right:-7.5rem;">
                                     {{ $header }}
                                 </h2>
 
@@ -53,7 +53,9 @@
                                 <div class="hidden sm:flex sm:items-center sm:ms-6">
                                     <x-dropdown align="right" width="48">
                                         <x-slot name="trigger">
-                                            <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150">
+                                            
+                                      <!--      <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 dark:text-gray-400 bg-white dark:bg-gray-800 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none transition ease-in-out duration-150"> -->
+                                             <button class="inline-flex items-center text-sm leading-4 font-medium text-gray-300 dark:text-gray-300 hover:text-white dark:hover:text-white focus:outline-none transition ease-in-out duration-150">
                                                 <div>{{ Auth::user()->name }}</div>
 
                                                 <div class="ms-1">

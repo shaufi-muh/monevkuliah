@@ -13,16 +13,25 @@ class UserSeeder extends Seeder
 {
     public function run(): void
     {
-        // 1. Buat atau cari Jurusan, dan simpan hasilnya dalam variabel $jurusan
+     /*   // 1. Buat atau cari Jurusan, dan simpan hasilnya dalam variabel $jurusan
         $jurusan = Jurusan::firstOrCreate(
             ['nama_jurusan' => 'Komputer dan Bisnis'],
             ['kode_jurusan' => 'Jur01', 'akronim_jurusan' => 'Kombis']
-        );
+        );                                                                          ******BUAT JUR DAN PROD DI SINI*******
         // 2. Buat atau cari Prodi, dan simpan hasilnya dalam variabel $prodi
         $prodi = Prodi::firstOrCreate(
             ['nama_prodi' => 'Teknologi Rekayasa Komputer Jaringan'],
             ['jenjang_pendidikan' => 'D4', 'akronim_prodi' => 'TRKJ', 'jurusan_id' => $jurusan->id,]
-        );
+        ); */
+
+        // 1. Ambil jurusan yang sudah ada (dari seeder), misal berdasarkan nama dan kode
+        $jurusan = Jurusan::where('nama_jurusan', 'Komputer dan Bisnis')
+            ->where('kode_jurusan', 'Jur01')
+            ->first();
+        // 2. Ambil prodi yang sudah ada (dari seeder), misal berdasarkan nama dan jenjang
+        $prodi = Prodi::where('nama_prodi', 'Teknologi Rekayasa Komputer Jaringan')
+            ->where('jenjang_pendidikan', 'D4')
+            ->first();
         // 3. Buat user Jurusan, gunakan $jurusan->id yang PASTI ada
         User::firstOrCreate(
             ['email' => 'kombis@example.com'],
