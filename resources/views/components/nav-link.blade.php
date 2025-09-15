@@ -8,7 +8,9 @@ $classes = ($active ?? false)
 
 <!--<a {{ $attributes->merge(['class' => $classes]) }}>
     {{ $slot }}
-</a> -->>
+</a> -->
+
+Kode di atas adalah komponen Blade untuk link navigasi di bagian atas halaman.         
 --}}
 
 @props(['active'])

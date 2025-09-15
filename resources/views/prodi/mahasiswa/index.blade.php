@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             {{ __('Kelola Data Mahasiswa') }}
         </h2>
     </x-slot>
@@ -58,6 +58,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIM</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. Telp. / Hp</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                 </tr>
                             </thead>
@@ -67,6 +68,7 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $mhs->nim }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $mhs->nama }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $mhs->email }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $mhs->no_telp }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center space-x-3">
                                             <a href="{{ route('prodi.mahasiswa.edit', $mhs->id) }}" class="text-indigo-600 hover:text-indigo-900">

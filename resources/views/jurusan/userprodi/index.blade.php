@@ -1,7 +1,7 @@
 <x-app-layout>
     {{-- Slot untuk Judul Halaman --}}
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             {{ __('Pengelolaan User Program Studi') }}
         </h2>
     </x-slot>

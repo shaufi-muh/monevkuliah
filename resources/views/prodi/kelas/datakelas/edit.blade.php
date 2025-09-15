@@ -1,6 +1,6 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        <h2>
             {{ __('Edit Kelas: ') }} {{ $kelas->nama_kelas }}
         </h2>
     </x-slot>
