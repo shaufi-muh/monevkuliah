@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Prodi;
 use App\Http\Controllers\Controller;
 use App\Models\Kelas;
 use App\Models\Mahasiswa;
+use App\Models\MataKuliah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB; // <-- Jangan lupa tambahkan ini di atas
@@ -24,17 +25,46 @@ class IsiKelasController extends Controller
         // Pastikan prodi hanya bisa akses kelasnya sendiri (optional, untuk keamanan)
         abort_if($kelas->prodi_id !== Auth::user()->prodi->id, 403);
 
-        $mahasiswaDiKelas = $kelas->mahasiswas()->pluck('mahasiswas.id');
+        $tab = $request->get('tab', 'mahasiswa');
 
+        // Mahasiswa
+        $mahasiswaDiKelas = $kelas->mahasiswas()->pluck('mahasiswas.id');
         $mahasiswaTersedia = Mahasiswa::query()
-            // ->where('prodi_id', Auth::user()->prodi->id) // Jika ada relasi mahasiswa ke prodi
             ->whereNotIn('id', $mahasiswaDiKelas)
             ->when($request->search, function ($query, $search) {
                 $query->where('nama', 'like', "%{$search}%")->orWhere('nim', 'like', "%{$search}%");
             })
             ->get();
-        
-        return view('prodi.kelas.isikelas.show', compact('kelas', 'mahasiswaTersedia'));
+
+        // Mata Kuliah
+        $matkulDiKelas = $kelas->mataKuliahs()->pluck('mata_kuliahs.id');
+        $matkulQuery = MataKuliah::whereNotIn('id', $matkulDiKelas)
+            ->where('semester', $kelas->urutan_semester);
+        if ($tab === 'matkul' && $request->filled('search_matkul')) {
+            $search = $request->input('search_matkul');
+            $matkulQuery->where(function($q) use ($search) {
+                $q->where('nama_matkul', 'like', "%$search%")
+                  ->orWhere('kode_matkul', 'like', "%$search%") ;
+            });
+        }
+        $matkulTersedia = $matkulQuery->get();
+
+        return view('prodi.kelas.isikelas.show', compact('kelas', 'mahasiswaTersedia', 'matkulTersedia', 'tab'));
+    }
+    // Tambah mata kuliah ke kelas
+    public function addMataKuliah(Request $request, Kelas $kelas)
+    {
+        $request->validate(['mata_kuliah_id' => 'required|exists:mata_kuliahs,id']);
+        $kelas->mataKuliahs()->syncWithoutDetaching([$request->mata_kuliah_id]);
+        return back()->with('success', 'Mata kuliah berhasil ditambahkan.')->with('tab', 'matkul');
+    }
+
+    // Hapus mata kuliah dari kelas
+    public function removeMataKuliah(Request $request, Kelas $kelas)
+    {
+        $request->validate(['mata_kuliah_id' => 'required|exists:mata_kuliahs,id']);
+        $kelas->mataKuliahs()->detach($request->mata_kuliah_id);
+        return back()->with('success', 'Mata kuliah berhasil dihapus.')->with('tab', 'matkul');
     }
 
     // Logika untuk menambahkan mahasiswa ke kelas

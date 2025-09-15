@@ -24,4 +24,10 @@ class Kelas extends Model
     {
         return $this->belongsTo(Prodi::class);
     }
+
+    // Relasi many-to-many ke MataKuliah
+    public function mataKuliahs()
+    {
+        return $this->belongsToMany(MataKuliah::class, 'kelas_mata_kuliah');
+    }
 }

@@ -15,8 +15,12 @@ class DataProdiController extends Controller
      */
     public function index()
     {
-        // Ambil semua data prodi untuk ditampilkan di tabel
-        $prodis = Prodi::with('jurusan')->latest()->paginate(5); // Paginate 10 data per halaman
+        // Ambil hanya prodi milik jurusan user yang login
+        $user = auth()->user();
+        $prodis = Prodi::with('jurusan')
+            ->where('jurusan_id', $user->jurusan_id)
+            ->latest()
+            ->paginate(5);
 
         // Kirim data prodi ke view
         return view('jurusan.dataprodi.index', compact('prodis'));
