@@ -67,6 +67,10 @@ Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->grou
     Route::get('isikelas/{kelas}', [IsiKelasController::class, 'show'])->name('isikelas.show');
     Route::post('isikelas/{kelas}/add', [IsiKelasController::class, 'addMahasiswa'])->name('isikelas.add');
     Route::post('isikelas/{kelas}/remove', [IsiKelasController::class, 'removeMahasiswa'])->name('isikelas.remove');
+
+    // Mata kuliah pada kelas
+    Route::post('isikelas/{kelas}/add-matkul', [IsiKelasController::class, 'addMataKuliah'])->name('isikelas.addMatkul');
+    Route::post('isikelas/{kelas}/remove-matkul', [IsiKelasController::class, 'removeMataKuliah'])->name('isikelas.removeMatkul');
     
     //Route::get('/dosen', [DosenController::class, 'index'])->name('dosen.index');
     //Route::post('/dosen', [DosenController::class, 'store'])->name('dosen.store');

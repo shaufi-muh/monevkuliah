@@ -14,4 +14,9 @@ class MataKuliah extends Model
         'sks',
         'semester',
     ];
+    // Relasi many-to-many ke Kelas
+    public function kelas()
+    {
+        return $this->belongsToMany(Kelas::class, 'kelas_mata_kuliah');
+    }
 }
