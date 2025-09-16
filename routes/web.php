@@ -6,11 +6,14 @@ use App\Http\Controllers\Jurusan\DataProdiController;
 use App\Http\Controllers\Jurusan\UserProdiController;
 use App\Http\Controllers\Jurusan\KuisionerController;
 use App\Http\Controllers\Jurusan\PertanyaanController;
+use App\Http\Controllers\Jurusan\BroadcastController;
 use App\Http\Controllers\Prodi\DosenController;
 use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
 use App\Http\Controllers\Prodi\KelasController;
 use App\Http\Controllers\Prodi\IsiKelasController;
+
+
 
 
 Route::get('/', function () {
@@ -48,6 +51,12 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
     Route::resource('kuisioner', KuisionerController::class); // <-- Tambahkan ini
     Route::patch('kuisioner/{kuisioner}/toggle-status', [KuisionerController::class, 'toggleStatus'])->name('kuisioner.toggleStatus');
     Route::resource('pertanyaan', PertanyaanController::class); // <-- Tambahkan ini
+
+    // Rute untuk menampilkan halaman formulir broadcast
+    Route::get('/broadcast', [BroadcastController::class, 'index'])->name('broadcast.index');
+
+    // Rute untuk memproses pengiriman form (action)
+    Route::post('/broadcast/send', [BroadcastController::class, 'send'])->name('broadcast.send');
 
 });
 
