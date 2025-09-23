@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2>
-            {{ __('Tambah Semester Akademik Baru') }}
+            {{ __('Tambah Tahun Akademik Baru') }}
         </h2>
     </x-slot>
 
@@ -9,7 +9,7 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
-                    <form action="{{ route('jurusan.semester-akademik.store') }}" method="POST">
+                    <form action="{{ route('jurusan.tahun-akademik.store') }}" method="POST">
                         @csrf
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div>
@@ -18,8 +18,8 @@
                                 <x-input-error :messages="$errors->get('tahun_akademik')" class="mt-2" />
                             </div>
                              <div>
-                                <x-input-label for="semester" value="Semester" />
-                                <select name="semester" id="semester" class="block mt-1 w-full border-gray-300 ... rounded-md shadow-sm">
+                                <x-input-label for="tahun" value="Tahun" />
+                                <select name="tahun" id="tahun" class="block mt-1 w-full border-gray-300 ... rounded-md shadow-sm">
                                     <option value="Ganjil">Ganjil</option>
                                     <option value="Genap">Genap</option>
                                 </select>
@@ -33,7 +33,7 @@
                             </select>
                         </div>
                         <div class="flex items-center justify-end mt-6">
-                            <a href="{{ route('jurusan.semester-akademik.index') }}" class="... mr-4">Batal</a>
+                            <a href="{{ route('jurusan.tahun-akademik.index') }}" class="... mr-4">Batal</a>
                             <x-primary-button>Simpan</x-primary-button>
                         </div>
                     </form>

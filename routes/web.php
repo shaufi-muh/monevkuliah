@@ -6,7 +6,7 @@ use App\Http\Controllers\Jurusan\DataProdiController;
 use App\Http\Controllers\Jurusan\UserProdiController;
 use App\Http\Controllers\Jurusan\KuisionerController;
 use App\Http\Controllers\Jurusan\PertanyaanController;
-use App\Http\Controllers\Jurusan\SemesterAkademikController; // <-- Tambahkan ini
+use App\Http\Controllers\Jurusan\TahunAkademikController; // <-- Tambahkan ini
 use App\Http\Controllers\Prodi\DosenController;
 use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
@@ -49,9 +49,9 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
     Route::resource('kuisioner', KuisionerController::class); // <-- Tambahkan ini
     Route::patch('kuisioner/{kuisioner}/toggle-status', [KuisionerController::class, 'toggleStatus'])->name('kuisioner.toggleStatus');
     Route::resource('pertanyaan', PertanyaanController::class); // <-- Tambahkan ini
-    Route::resource('semester-akademik', SemesterAkademikController::class); // <-- Tambahkan ini
-    // Rute baru untuk toggle status semester
-    Route::patch('semester-akademik/{semester_akademik}/toggle-status', [SemesterAkademikController::class, 'toggleStatus'])->name('semester-akademik.toggleStatus');
+    Route::resource('tahun-akademik', TahunAkademikController::class); // <-- Tambahkan ini
+    // Rute baru untuk toggle status tahun
+    Route::patch('tahun-akademik/{tahun_akademik}/toggle-status', [TahunAkademikController::class, 'toggleStatus'])->name('tahun-akademik.toggleStatus');
 
 });
 
