@@ -65,7 +65,7 @@ class TahunAkademikController extends Controller
         TahunAkademik::create($request->all() + ['jurusan_id' => $jurusanId]);
 
         return redirect()->route('jurusan.tahun-akademik.index')
-                         ->with('success', 'Tahun Akademik berhasil ditambahkan.');
+                         ->with('success', 'Data Tahun Akademik berhasil ditambahkan.');
     }
 
     /**

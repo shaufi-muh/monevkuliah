@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Jurusan;
 
 use App\Http\Controllers\Controller;
 use App\Models\Kuisioner;
+use App\Models\TahunAkademik; // <-- Tambahkan use statement untuk model TahunAkademik
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,7 +17,10 @@ class KuisionerController extends Controller
     {
         $jurusanId = Auth::user()->jurusan_id;
         $kuisioners = Kuisioner::where('jurusan_id', $jurusanId)->latest()->get();
-        return view('jurusan.kuisioner.index', compact('kuisioners'));
+        $tahunAkademikAktif = \App\Models\TahunAkademik::where('status', 'aktif')
+            ->where('jurusan_id', $jurusanId)
+            ->first();
+        return view('jurusan.kuisioner.index', compact('kuisioners', 'tahunAkademikAktif'));
     }
 
     /**
@@ -24,7 +28,11 @@ class KuisionerController extends Controller
      */
     public function create()
     {
-        return view('jurusan.kuisioner.create');
+        $tahunAkademikAktif = TahunAkademik::where('status', 'aktif')
+                                            ->where('jurusan_id', Auth::user()->jurusan_id)
+                                            ->first();
+
+        return view('jurusan.kuisioner.create', compact('tahunAkademikAktif'));
     }
 
     /**
@@ -33,23 +41,28 @@ class KuisionerController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-           // 'tahun_akademik' => 'required|string|max:9|regex:/^\d{4}\/\d{4}$/',
-            'tahun_akademik' => [
-                'required',
-                'string',
-                'max:9',
-                'regex:/^\d{4}\/\d{4}$/'
-            ],
-            'semester' => 'required|in:Ganjil,Genap',
             'sesi' => 'required|in:Tengah,Akhir',
             'deskripsi' => 'nullable|string',
             'status' => 'required|in:aktif,tidak_aktif',
         ]);
 
+        $tahunAkademikAktif = TahunAkademik::where('status', 'aktif')
+            ->where('jurusan_id', Auth::user()->jurusan_id)
+            ->first();
+
+        if (!$tahunAkademikAktif) {
+            return redirect()->back()->withInput()->withErrors(['tahun_akademik' => 'Tidak bisa membuat set kuisioner baru karena belum ada tahun akademik yang aktif. Silakan aktifkan tahun akademik terlebih dahulu.']);
+        }
+
+        $request->merge([
+            'tahun_akademik' => $tahunAkademikAktif->tahun_akademik,
+            'semester' => $tahunAkademikAktif->semester,
+            'tahun_akademik_id' => $tahunAkademikAktif->id
+        ]);
         Kuisioner::create($request->all() + ['jurusan_id' => Auth::user()->jurusan_id]);
 
         return redirect()->route('jurusan.kuisioner.index')
-                        ->with('success', 'Set Kuisioner berhasil dibuat.');
+            ->with('success', 'Set Kuisioner berhasil dibuat.');
 }
 
     /**

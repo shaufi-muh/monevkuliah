@@ -16,12 +16,14 @@
                         @csrf
                         @method('PUT') {{-- Wajib untuk form edit --}}
                         
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div>
-                                <x-input-label for="tahun_akademik" :value="__('Tahun Akademik')" />
-                                <x-text-input id="tahun_akademik" class="block mt-1 w-full" name="tahun_akademik" :value="old('tahun_akademik', $kuisioner->tahun_akademik)" maxlength="9" pattern="\d{4}\/\d{4}" placeholder="Contoh: 2024/2025" title="Harap masukkan format tahun yang benar (Contoh: 2024/2025)" required />
-                                <x-input-error :messages="$errors->get('tahun_akademik')" class="mt-2" />
+                        <div class="mb-4">
+                            <div class="p-3 bg-blue-50 border border-blue-200 rounded mb-2">
+                                <span class="font-semibold">Tahun Akademik:</span>
+                                <span class="ml-2">{{ $kuisioner->tahun_akademik }} ({{ $kuisioner->semester }})</span>
+                                <input type="hidden" name="tahun_akademik" value="{{ $kuisioner->tahun_akademik }}">
+                                <input type="hidden" name="semester" value="{{ $kuisioner->semester }}">
                             </div>
+                        </div>
                         <!--    <div>
                                 <x-input-label for="tahun_akademik" :value="__('Tahun Akademik')" />
                                 <x-text-input id="tahun_akademik" class="block mt-1 w-full" name="tahun_akademik" :value="old('tahun_akademik', $kuisioner->tahun_akademik)"  maxlength="9" pattern="\d{4}\/\d{4}" placeholder="Contoh: 2024/2025" title="Harap masukkan format tahun yang benar (Contoh: 2024/2025)" required />  

@@ -28,4 +28,10 @@ class Kuisioner extends Model
     {
         return $this->hasMany(Pertanyaan::class);
     }
+
+    // Relasi: Satu Kuisioner dimiliki oleh satu Tahun Akademik
+    public function tahunAkademik()
+    {
+        return $this->belongsTo(TahunAkademik::class);
+    }
 }

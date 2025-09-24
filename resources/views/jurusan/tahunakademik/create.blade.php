@@ -18,8 +18,8 @@
                                 <x-input-error :messages="$errors->get('tahun_akademik')" class="mt-2" />
                             </div>
                              <div>
-                                <x-input-label for="tahun" value="Tahun" />
-                                <select name="tahun" id="tahun" class="block mt-1 w-full border-gray-300 ... rounded-md shadow-sm">
+                                <x-input-label for="semester" value="Semester" />
+                                <select name="semester" id="semester" class="block mt-1 w-full border-gray-300 ... rounded-md shadow-sm">
                                     <option value="Ganjil">Ganjil</option>
                                     <option value="Genap">Genap</option>
                                 </select>
