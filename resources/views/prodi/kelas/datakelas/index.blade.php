@@ -19,7 +19,7 @@
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         <div>
-                            <label for="urutan_semester">Semester</label>
+                            <label for="urutan_semester">Tahun</label>
                             <select name="urutan_semester" id="urutan_semester" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                                 @for ($i = 1; $i <= 14; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
@@ -51,7 +51,7 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Kelas</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Urut Semester</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Urut Tahun</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kelompok Kelas</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                         </tr>
@@ -90,15 +90,15 @@
     </div>
     <script>
         // Script sederhana untuk preview nama kelas
-        const semester = document.getElementById('urutan_semester');
+        const tahun = document.getElementById('urutan_semester');
         const grup = document.getElementById('grup_kelas');
         const preview = document.getElementById('preview_nama_kelas');
         const akronim = '{{ $prodi->akronim_prodi }}';
 
         function updatePreview() {
-            preview.textContent = `${akronim}-${semester.value}${grup.value.toUpperCase()}`;
+            preview.textContent = `${akronim}-${tahun.value}${grup.value.toUpperCase()}`;
         }
-        semester.addEventListener('change', updatePreview);
+        tahun.addEventListener('change', updatePreview);
         grup.addEventListener('keyup', updatePreview);
     </script>
 </x-app-layout>

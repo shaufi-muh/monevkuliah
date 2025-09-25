@@ -11,14 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mata_kuliahs', function (Blueprint $table) {
+        Schema::create('semester_akademiks', function (Blueprint $table) {
             $table->id();
-
-            $table->string('kode_matkul');
-            $table->string('nama_matkul');
-            $table->string('sks');
-            $table->integer('tahun'); // <-- Tambahkan ini (misal diisi: 1, 2, 3, dst.)
-            
+            $table->string('tahun_akademik'); // Contoh: "2025/2026"
+            $table->enum('semester', ['Ganjil', 'Genap']);
+            $table->enum('status', ['aktif', 'tidak_aktif'])->default('tidak_aktif');
+            $table->foreignId('jurusan_id')->constrained('jurusans');
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mata_kuliahs');
+        Schema::dropIfExists('semester_akademiks');
     }
 };

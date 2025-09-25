@@ -39,7 +39,7 @@ class IsiKelasController extends Controller
         // Mata Kuliah
         $matkulDiKelas = $kelas->mataKuliahs()->pluck('mata_kuliahs.id');
         $matkulQuery = MataKuliah::whereNotIn('id', $matkulDiKelas)
-            ->where('semester', $kelas->urutan_semester);
+            ->where('tahun', $kelas->urutan_semester);
         if ($tab === 'matkul' && $request->filled('search_matkul')) {
             $search = $request->input('search_matkul');
             $matkulQuery->where(function($q) use ($search) {
