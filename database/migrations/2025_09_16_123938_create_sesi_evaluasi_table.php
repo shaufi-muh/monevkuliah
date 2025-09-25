@@ -16,6 +16,13 @@ return new class extends Migration
             $table->string('mahasiswa_nim');
             $table->foreign('mahasiswa_nim')->references('nim')->on('mahasiswas');
 
+            // Relasi ke kuisioner (periode evaluasi)
+            $table->unsignedBigInteger('kuisioner_id');
+            $table->foreign('kuisioner_id')->references('id')->on('kuisioners');
+
+            // Tahun akademik (opsional, untuk tracking tambahan)
+            $table->string('tahun_akademik')->nullable();
+
             // "Tiket Masuk Utama" yang akan dikirim via WA/SMS
             $table->string('token_utama')->unique();
 

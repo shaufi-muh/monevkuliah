@@ -14,6 +14,7 @@ use App\Models\Kelas;
 //use App\Models\Pertanyaan;
 //use App\Models\Jawaban;
 use App\Models\User;
+//use App\Models\SesiEvaluasi;
 
 class DatabaseSeeder extends Seeder
 {
@@ -39,6 +40,7 @@ class DatabaseSeeder extends Seeder
                 //KuisionerSeeder::class,
                 //PertanyaanSeeder::class,
                 //JawabanSeeder::class,
+                SesiEvaluasiSeeder::class,
                 UserSeeder::class,
                 
             ]);

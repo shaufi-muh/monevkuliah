@@ -41,12 +41,7 @@
                             @endif
                         </div>
 
-                        {{-- BAGIAN 2: SEMESTER --}}
-                        <div>
-                            <x-input-label for="semester_label" value="Semester" />
-                            <x-text-input id="semester_label" name="semester_label" type="text" class="mt-1 block w-full" placeholder="Contoh: Ganjil 2025/2026" :value="old('semester_label')" />
-                            <x-input-error class="mt-2" :messages="$errors->get('semester_label')" />
-                        </div>
+
                         
                         {{-- BAGIAN 3: PROGRAM STUDI (CHECKBOX) --}}
                         <div>

@@ -5,7 +5,8 @@ namespace App\Http\Controllers\Jurusan;
 use App\Http\Controllers\Controller;
 use App\Models\Kuisioner;
 use App\Models\Prodi;
-use App\Models\User; // Asumsi prodi ada di tabel user
+use App\Models\User;
+use App\Models\SesiEvaluasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -35,29 +36,37 @@ class BroadcastController extends Controller
 
     public function send(Request $request)
     {
-        // 1. Validasi Input (Antisipasi Error)
+        // Validasi input tanpa semester
         $validatedData = $request->validate([
             'kuisioner_id'   => 'required|exists:kuisioners,id',
-            'semester_label' => 'required|string|max:100',
-            'prodi_ids'      => 'required|array|min:1', // Memastikan minimal satu prodi dipilih
-            'prodi_ids.*'    => 'exists:prodi,id',     // Memastikan setiap ID prodi valid
+            'prodi_ids'      => 'required|array|min:1',
+            'prodi_ids.*'    => 'exists:prodi,id',
         ], [
-            // Pesan error kustom dalam Bahasa Indonesia
             'kuisioner_id.required'   => 'Tidak ada kuisioner yang aktif untuk dikirim.',
-            'semester_label.required' => 'Kolom semester wajib diisi.',
             'prodi_ids.required'      => 'Anda harus memilih minimal satu Program Studi.',
         ]);
 
-        // Jika validasi berhasil, kita akan lanjutkan di sini.
-        // Untuk sekarang, kita hentikan dan lihat dulu data yang tervalidasi.
-        dd($validatedData);
+        // Ambil mahasiswa dari prodi terpilih YANG SUDAH TERGABUNG KE DALAM KELAS
+        $mahasiswaList = \App\Models\Mahasiswa::whereIn('prodi_id', $validatedData['prodi_ids'])
+            ->whereHas('kelas')
+            ->get();
 
-        // TODO: Langkah selanjutnya adalah:
-        // 1. Mencari mahasiswa berdasarkan semester_label dan prodi_ids.
-        // 2. Generate token unik untuk setiap mahasiswa.
-        // 3. Menampilkan halaman konfirmasi dengan daftar link.
+        // Generate token unik & simpan historis ke sesi_evaluasi
+        $kuisioner = \App\Models\Kuisioner::find($validatedData['kuisioner_id']);
+        $tahunAkademik = $kuisioner ? $kuisioner->tahun_akademik : null;
 
-        return back()->with('success', 'Proses pengiriman tautan evaluasi sedang berjalan di latar belakang.');
+        foreach ($mahasiswaList as $mhs) {
+            $token = bin2hex(random_bytes(16));
+            SesiEvaluasi::create([
+                'mahasiswa_nim' => $mhs->nim,
+                'kuisioner_id' => $kuisioner->id,
+                'tahun_akademik' => $tahunAkademik,
+                'token_utama' => $token,
+                // 'berlaku_hingga' => ... (isi jika ingin ada batas waktu)
+            ]);
+        }
+
+        return back()->with('success', 'Proses pengiriman tautan evaluasi dan pencatatan historis berhasil.');
     }
 
     /**
