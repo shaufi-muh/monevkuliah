@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('mahasiswa_semesters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('tahun_akademik_id')->constrained('semester_akademiks')->onDelete('cascade');
+            $table->foreignId('tahun_akademik_id')->constrained('tahun_akademiks')->onDelete('cascade');
             $table->enum('status_mahasiswa', ['Aktif', 'Cuti', 'Non-Aktif'])->default('Non-Aktif');
             $table->timestamps();
 

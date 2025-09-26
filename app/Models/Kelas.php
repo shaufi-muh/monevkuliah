@@ -17,7 +17,7 @@ class Kelas extends Model
 
     public function mahasiswas()
     {
-        return $this->belongsToMany(Mahasiswa::class, 'kelas_mahasiswa');
+        return $this->belongsToMany(Mahasiswa::class, 'kelas_mahasiswa', 'kelas_id', 'user_id');
     }
 
     public function prodi()

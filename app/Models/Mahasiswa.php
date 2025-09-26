@@ -17,9 +17,14 @@ class Mahasiswa extends Model
         'no_telp',
     ];
 
+    // Parameter:
+    // 1. Model tujuan: Kelas::class
+    // 2. Nama tabel pivot: 'kelas_mahasiswa'
+    // 3. Foreign key model ini di tabel pivot: 'user_id' (atau 'mahasiswa_id' sesuai desain Anda)
+    // 4. Foreign key model tujuan di tabel pivot: 'kelas_id'
     public function kelas()
     {
-        return $this->belongsToMany(Kelas::class, 'kelas_mahasiswa');
+        return $this->belongsToMany(Kelas::class, 'kelas_mahasiswa', 'user_id', 'kelas_id');
     }
 
     public function prodi()
