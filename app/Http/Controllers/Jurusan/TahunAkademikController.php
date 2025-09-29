@@ -16,11 +16,11 @@ class TahunAkademikController extends Controller
     public function index()
     {
         $jurusanId = Auth::user()->jurusan_id;
-        $semesters = TahunAkademik::where('jurusan_id', $jurusanId)
-                                     ->orderBy('tahun_akademik', 'desc')
-                                     ->orderBy('semester', 'desc')
-                                     ->get();
-        return view('jurusan.tahunakademik.index', compact('semesters'));
+        $tahunAkademiks = TahunAkademik::where('jurusan_id', $jurusanId)
+            ->orderBy('tahun_akademik', 'desc')
+            ->orderBy('semester', 'desc')
+            ->get();
+        return view('jurusan.tahunakademik.index', compact('tahunAkademiks'));
     }
 
     /**
