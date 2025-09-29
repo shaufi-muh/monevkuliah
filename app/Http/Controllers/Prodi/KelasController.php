@@ -21,8 +21,7 @@ class KelasController extends Controller
         // Ambil kelas yang hanya milik prodi tersebut
         $kelasList = Kelas::where('prodi_id', $prodi->id)->latest()->get();
 
-        return view('prodi.kelas.datakelas.index', compact('prodi', 'kelasList'))
-        ->with('success', 'Data Kelas berhasil ditambahkan.');
+        return view('prodi.kelas.datakelas.index', compact('prodi', 'kelasList'));
     }
 
     /**
