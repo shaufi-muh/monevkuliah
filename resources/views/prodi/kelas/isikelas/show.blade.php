@@ -162,7 +162,7 @@
                                         @if(request('search_matkul'))
                                             Mata kuliah tidak ditemukan.
                                         @else
-                                            Semua mata kuliah tahun ini sudah masuk ke dalam kelas.
+                                            Semua mata kuliah semester ini sudah masuk ke dalam kelas.
                                         @endif
                                     </li>
                                 @endforelse

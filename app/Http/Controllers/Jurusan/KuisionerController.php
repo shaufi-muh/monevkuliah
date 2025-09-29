@@ -40,10 +40,27 @@ class KuisionerController extends Controller
      */
     public function store(Request $request)
     {
+        $jurusanId = Auth::user()->jurusan_id;
         $request->validate([
+            'tahun_akademik' => [
+                'required',
+                'string',
+                'max:9',
+                'regex:/^\d{4}\/\d{4}$/',
+                \Illuminate\Validation\Rule::unique('kuisioners')->where(function ($query) use ($request, $jurusanId) {
+                    return $query->where('tahun_akademik', $request->tahun_akademik)
+                                 ->where('semester', $request->semester)
+                                 ->where('sesi', $request->sesi)
+                                 ->where('jurusan_id', $jurusanId);
+                }),
+            ],
+            'semester' => 'required|in:Ganjil,Genap',
+
             'sesi' => 'required|in:Tengah,Akhir',
             'deskripsi' => 'nullable|string',
             'status' => 'required|in:aktif,tidak_aktif',
+        ], [
+            'tahun_akademik.unique' => 'Set Kuisioner dengan kombinasi Tahun Akademik, Semester, dan Sesi sudah ada.'
         ]);
 
         $tahunAkademikAktif = TahunAkademik::where('status', 'aktif')
@@ -60,6 +77,9 @@ class KuisionerController extends Controller
             'tahun_akademik_id' => $tahunAkademikAktif->id
         ]);
         Kuisioner::create($request->all() + ['jurusan_id' => Auth::user()->jurusan_id]);
+
+        Kuisioner::create($request->all() + ['jurusan_id' => $jurusanId]);
+
 
         return redirect()->route('jurusan.kuisioner.index')
             ->with('success', 'Set Kuisioner berhasil dibuat.');
@@ -87,19 +107,31 @@ class KuisionerController extends Controller
      */
     public function update(Request $request, Kuisioner $kuisioner) // <-- Gunakan Route Model Binding
     {
-        // 1. Validasi input
+        $jurusanId = Auth::user()->jurusan_id;
         $request->validate([
-            'tahun_akademik' => 'required|string',
+            'tahun_akademik' => [
+                'required',
+                'string',
+                'max:9',
+                'regex:/^\d{4}\/\d{4}$/',
+                \Illuminate\Validation\Rule::unique('kuisioners')->where(function ($query) use ($request, $jurusanId, $kuisioner) {
+                    return $query->where('tahun_akademik', $request->tahun_akademik)
+                                 ->where('semester', $request->semester)
+                                 ->where('sesi', $request->sesi)
+                                 ->where('jurusan_id', $jurusanId)
+                                 ->where('id', '!=', $kuisioner->id);
+                }),
+            ],
             'semester' => 'required|in:Ganjil,Genap',
             'sesi' => 'required|in:Tengah,Akhir',
             'deskripsi' => 'nullable|string',
             'status' => 'required|in:aktif,tidak_aktif',
+        ], [
+            'tahun_akademik.unique' => 'Set Kuisioner dengan kombinasi Tahun Akademik, Semester, dan Sesi sudah ada.'
         ]);
 
-        // 2. Update data pada model
         $kuisioner->update($request->all());
 
-        // 3. Redirect ke halaman index dengan pesan sukses
         return redirect()->route('jurusan.kuisioner.index')
                          ->with('success', 'Set Kuisioner berhasil diperbarui.');
     }

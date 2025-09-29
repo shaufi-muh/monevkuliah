@@ -39,8 +39,8 @@
                             <div>
                                 <x-input-label for="sesi" :value="__('Sesi')" />
                                 <select name="sesi" id="sesi" class="block mt-1 w-full border-gray-300 ... rounded-md shadow-sm">
-                                    <option value="Tengah" {{ old('sesi', $kuisioner->sesi) == 'Tengah' ? 'selected' : '' }}>Tengah Tahun</option>
-                                    <option value="Akhir" {{ old('sesi', $kuisioner->sesi) == 'Akhir' ? 'selected' : '' }}>Akhir Tahun</option>
+                                    <option value="Tengah" {{ old('sesi', $kuisioner->sesi) == 'Tengah' ? 'selected' : '' }}>Tengah Semester</option>
+                                    <option value="Akhir" {{ old('sesi', $kuisioner->sesi) == 'Akhir' ? 'selected' : '' }}>Akhir Semester</option>
                                 </select>
                             </div>
                         </div>

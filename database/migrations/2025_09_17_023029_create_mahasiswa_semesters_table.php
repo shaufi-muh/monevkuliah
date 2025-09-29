@@ -11,10 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('mahasiswa_tahuns', function (Blueprint $table) {
+        Schema::create('mahasiswa_semesters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('tahun_akademik_id')->constrained('tahun_akademiks')->onDelete('cascade');
+            $table->foreignId('tahun_akademik_id')->constrained('semester_akademiks')->onDelete('cascade');
             $table->enum('status_mahasiswa', ['Aktif', 'Cuti', 'Non-Aktif'])->default('Non-Aktif');
             $table->timestamps();
 
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mahasiswa_tahuns');
+        Schema::dropIfExists('mahasiswa_semesters');
     }
 };

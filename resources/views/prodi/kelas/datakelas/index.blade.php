@@ -19,7 +19,7 @@
                     @csrf
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         <div>
-                            <label for="urutan_semester">Tahun</label>
+                            <label for="urutan_semester">Semester Ke-</label>
                             <select name="urutan_semester" id="urutan_semester" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                                 @for ($i = 1; $i <= 14; $i++)
                                 <option value="{{ $i }}">{{ $i }}</option>
@@ -51,7 +51,7 @@
                     <thead class="bg-gray-50">
                         <tr>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Kelas</th>
-                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Urut Tahun</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Semester Ke-</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Kelompok Kelas</th>
                             <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                         </tr>

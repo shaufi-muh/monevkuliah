@@ -26,8 +26,8 @@
                                 <input type="number" name="sks" value="{{ old('sks', $matakuliah->sks) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                             </div>
                             <div>
-                                <label for="tahun">Tahun</label>
-                                <input type="number" name="tahun" value="{{ old('tahun', $matakuliah->tahun) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
+                                <label for="urutan_semester">Semester Ke-</label>
+                                <input type="number" name="urutan_semester" value="{{ old('urutan_semester', $matakuliah->urutan_semester) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                             </div>
                         </div>
                         <div class="mt-4 flex items-center gap-4">

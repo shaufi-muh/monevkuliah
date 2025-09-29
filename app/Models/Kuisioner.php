@@ -9,12 +9,12 @@ class Kuisioner extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'tahun_akademik', // baru
-        'semester',       // baru
-        'sesi',           
-        'diskripsi',
+        'tahun_akademik',
+        'semester',
+        'sesi',
+        'deskripsi',
         'status',
-        'jurusan_id', // Pastikan ini ada
+        'jurusan_id',
     ];
 
     // Relasi: Satu Kuisioner dimiliki oleh satu Jurusan
