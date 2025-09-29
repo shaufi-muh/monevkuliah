@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('nama', 150);
             $table->string('email')->unique();
             $table->string('no_telp')->nullable();
+            $table->enum('status', ['aktif', 'tidak_aktif', 'cuti'])->default('aktif');
             $table->timestamps(); //bawaan laravel
         });
     }

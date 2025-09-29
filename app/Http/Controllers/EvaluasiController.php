@@ -68,7 +68,7 @@ class EvaluasiController extends Controller
         // b. Ambil semua kelas yang diikuti oleh mahasiswa INI pada semester AKTIF ITU
         // Ini membutuhkan relasi yang tepat di Model Mahasiswa
         $kelasYangDiikuti = $mahasiswa->kelas()
-                                    ->where('tahun_akademik_id', $semesterAktif->id)
+                                    ->where('tahun_akademik_id', $tahunAkademikAktif->id)
                                     ->with('mataKuliah', 'dosen') // Ambil juga info matkul & dosen
                                     ->get();
 

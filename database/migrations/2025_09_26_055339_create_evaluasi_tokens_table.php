@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('evaluasi_tokens', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); // Mahasiswa yang dituju
+            $table->foreignId('mahasiswa_id')->constrained('mahasiswas')->onDelete('cascade'); // Mahasiswa yang dituju
             $table->foreignId('kuisioner_id')->constrained('kuisioners')->onDelete('cascade'); // Kuisioner yang digunakan
             $table->string('token', 100)->unique(); // Token unik
             $table->timestamp('digunakan_pada')->nullable(); // Menandai kapan token digunakan

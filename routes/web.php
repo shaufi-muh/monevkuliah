@@ -40,9 +40,7 @@ Route::get('/dashboard', function () {
 
 // Grup Rute untuk JURUSAN
 Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('jurusan.dashboard'); // Buat view di resources/views/jurusan/dashboard.blade.php
-    })->name('dashboard');
+    Route::get('/dashboard', [TahunAkademikController::class, 'dashboard'])->name('dashboard');
     // Tambahkan rute jurusan lainnya di sini
 
     Route::resource('dataprodi', DataProdiController::class);

@@ -10,7 +10,7 @@ class MahasiswaSemester extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'mahasiswa_id',
         'tahun_akademik_id',
         'status_mahasiswa',
     ];

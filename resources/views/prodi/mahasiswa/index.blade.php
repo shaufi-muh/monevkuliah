@@ -40,6 +40,15 @@
                                 <input type="text" name="no_telp" value="{{ old('no_telp') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                                 @error('no_telp') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
+                            <div>
+                                <label for="status" class="block font-medium text-sm text-gray-700">Status Mahasiswa</label>
+                                <select name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                    <option value="aktif" {{ old('status') == 'aktif' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="tidak_aktif" {{ old('status') == 'tidak_aktif' ? 'selected' : '' }}>Tidak Aktif</option>
+                                    <option value="cuti" {{ old('status') == 'cuti' ? 'selected' : '' }}>Cuti</option>
+                                </select>
+                                @error('status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
                         </div>
                         <div class="mt-4">
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border rounded-md font-semibold text-xs text-white uppercase hover:bg-gray-700">
