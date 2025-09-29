@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('tahun_akademik'); // Menyimpan tahun, contoh: 2025
             $table->enum('semester', ['Ganjil', 'Genap']);
-            $table->enum('sesi', ['Tengah', 'Akhir']); //Contoh: "Evaluasi Tengah Tahun Ganjil 2025"
+            $table->enum('sesi', ['Tengah', 'Akhir']); //Contoh: "Evaluasi Tengah Semester Ganjil 2025"
             $table->text('deskripsi')->nullable();
             $table->enum('status', ['aktif', 'tidak_aktif'])->default('tidak_aktif');
 

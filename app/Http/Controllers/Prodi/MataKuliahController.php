@@ -35,7 +35,7 @@ class MataKuliahController extends Controller
             'kode_matkul' => 'required|string|max:10|unique:mata_kuliahs,kode_matkul',
             'nama_matkul' => 'required|string|max:255',
             'sks' => 'required|integer|min:1|max:6',
-            'tahun' => 'required|integer|min:1|max:8',
+            'urutan_semester' => 'required|integer|min:1|max:8',
         ]);
 
         // Simpan ke DB
@@ -70,7 +70,7 @@ class MataKuliahController extends Controller
             'kode_matkul' => 'required|string|max:10|unique:mata_kuliahs,kode_matkul,' . $matakuliah->id,
             'nama_matkul' => 'required|string|max:255',
             'sks' => 'required|integer|min:1|max:6',
-            'tahun' => 'required|integer|min:1|max:8',
+            'urutan_semester' => 'required|integer|min:1|max:8',
         ]);
 
         $matakuliah->update($request->all());
