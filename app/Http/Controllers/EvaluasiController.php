@@ -56,14 +56,14 @@ class EvaluasiController extends Controller
         
         // 4. LOGIKA FILTERISASI MATA KULIAH (YANG DISEMPURNAKAN)
     
-        // a. Cari tahu semester aktif yang relevan untuk evaluasi ini
+        // a. Cari tahu tahun akademik aktif yang relevan untuk evaluasi ini
         // (Kita bisa ambil dari data mahasiswa_semesters)
-        $semesterAktif = TahunAkademik::where('jurusan_id', $kuisioner->jurusan_id)
+        $tahunAkademikAktif = TahunAkademik::where('jurusan_id', $kuisioner->jurusan_id)
                                          ->where('status', 'aktif')
-                                         ->first(); // ... Logika untuk mendapatkan semester aktif terkait evaluasi
-        if (!$semesterAktif) {
+                                         ->first(); // ... Logika untuk mendapatkan tahun akademik aktif terkait evaluasi
+        if (!$tahunAkademikAktif) {
             // Anda bisa menampilkan view error yang lebih ramah di sini jika mau.
-            abort(503, 'Saat ini tidak ada sesi evaluasi yang aktif. Silakan hubungi administrator.');
+            abort(503, 'Saat ini tahun akademik belum ada yang aktif. Silakan hubungi administrator.');
         }
         // b. Ambil semua kelas yang diikuti oleh mahasiswa INI pada semester AKTIF ITU
         // Ini membutuhkan relasi yang tepat di Model Mahasiswa
