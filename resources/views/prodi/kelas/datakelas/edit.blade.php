@@ -14,7 +14,7 @@
                     @method('PATCH')
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
                         <div>
-                            <label for="urutan_semester">Tahun</label>
+                            <label for="urutan_semester">Semester Ke-</label>
                             <select name="urutan_semester" id="urutan_semester" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                                 @for ($i = 1; $i <= 14; $i++)
                                 <option value="{{ $i }}" @selected(old('urutan_semester', $kelas->urutan_semester) == $i)>
