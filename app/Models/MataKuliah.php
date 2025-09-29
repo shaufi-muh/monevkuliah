@@ -12,7 +12,7 @@ class MataKuliah extends Model
         'kode_matkul',
         'nama_matkul',
         'sks',
-        'tahun',
+        'urutan_semester',
     ];
     // Relasi many-to-many ke Kelas
     public function kelas()
