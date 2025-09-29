@@ -14,4 +14,9 @@ class TahunAkademik extends Model
         'status',
         'jurusan_id',
     ];
+
+    public function kuisioners()
+    {
+        return $this->hasMany(Kuisioner::class);
+    }
 }
