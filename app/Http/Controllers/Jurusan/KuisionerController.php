@@ -62,14 +62,15 @@ class KuisionerController extends Controller
         ], [
             'tahun_akademik.unique' => 'Set Kuisioner dengan kombinasi Tahun Akademik, Semester, dan Sesi sudah ada.'
         ]);
-
+        // logika tambahan: pastikan ada tahun akademik aktif sebelum membuat kuisioner baru
+        /*
         $tahunAkademikAktif = TahunAkademik::where('status', 'aktif')
             ->where('jurusan_id', Auth::user()->jurusan_id)
             ->first();
 
         if (!$tahunAkademikAktif) {
             return redirect()->back()->withInput()->withErrors(['tahun_akademik' => 'Tidak bisa membuat set kuisioner baru karena belum ada tahun akademik yang aktif. Silakan aktifkan tahun akademik terlebih dahulu.']);
-        }
+        } 
 
         $request->merge([
             'tahun_akademik' => $tahunAkademikAktif->tahun_akademik,
@@ -78,11 +79,13 @@ class KuisionerController extends Controller
         ]);
         Kuisioner::create($request->all() + ['jurusan_id' => Auth::user()->jurusan_id]);
 
+        Kuisioner::create($request->all() + ['jurusan_id' => $jurusanId]); 
+        */
+
         Kuisioner::create($request->all() + ['jurusan_id' => $jurusanId]);
 
-
         return redirect()->route('jurusan.kuisioner.index')
-            ->with('success', 'Set Kuisioner berhasil dibuat.');
+                        ->with('success', 'Set Kuisioner berhasil dibuat.');
 }
 
     /**
