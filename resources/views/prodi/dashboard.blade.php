@@ -46,7 +46,7 @@
                 </div>
             @else
                 <div class="bg-red-50 border border-red-200 rounded p-4 mb-4">
-                    <span class="font-semibold text-red-600">Anda belum mengaktifkan tahun akademik.</span>
+                    <span class="font-semibold text-red-600">Periode Tahun Akademik Belum Diaktifkan. Harap Hubungi Admin Jurusan.</span>
                 </div>
             @endif
         </div>   
