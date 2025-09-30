@@ -14,7 +14,8 @@ class MataKuliahController extends Controller
     public function index()
     {
         $mata_kuliahs = MataKuliah::with('dosenPengampu')->latest()->paginate(10);
-        return view('prodi.matakuliah.index', compact('mata_kuliahs'));
+        $dosens = \App\Models\Dosen::orderBy('nama_dosen')->get();
+        return view('prodi.matakuliah.index', compact('mata_kuliahs', 'dosens'));
     }
 
     /**
