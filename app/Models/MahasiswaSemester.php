@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class MahasiswaTahun extends Model
+class MahasiswaSemester extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
+        'mahasiswa_id',
         'tahun_akademik_id',
         'status_mahasiswa',
     ];

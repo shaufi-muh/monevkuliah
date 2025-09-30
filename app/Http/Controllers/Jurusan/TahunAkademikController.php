@@ -13,6 +13,18 @@ class TahunAkademikController extends Controller
     /**
      * Display a listing of the resource.
      */
+        /**
+     * Dashboard jurusan: tampilkan tahun akademik aktif
+     */
+    public function dashboard()
+    {
+        $jurusanId = Auth::user()->jurusan_id;
+        $tahunAkademikAktif = TahunAkademik::where('jurusan_id', $jurusanId)
+            ->where('status', 'aktif')
+            ->first();
+        return view('jurusan.dashboard', compact('tahunAkademikAktif'));
+    }
+    
     public function index()
     {
         $jurusanId = Auth::user()->jurusan_id;

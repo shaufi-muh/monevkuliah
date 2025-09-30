@@ -12,6 +12,7 @@ use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
 use App\Http\Controllers\Prodi\KelasController;
 use App\Http\Controllers\Prodi\IsiKelasController;
+use App\Http\Controllers\EvaluasiController; // <-- Tambahkan ini
 
 
 Route::get('/', function () {
@@ -39,9 +40,7 @@ Route::get('/dashboard', function () {
 
 // Grup Rute untuk JURUSAN
 Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('jurusan.dashboard'); // Buat view di resources/views/jurusan/dashboard.blade.php
-    })->name('dashboard');
+    Route::get('/dashboard', [TahunAkademikController::class, 'dashboard'])->name('dashboard');
     // Tambahkan rute jurusan lainnya di sini
 
     Route::resource('dataprodi', DataProdiController::class);
@@ -82,6 +81,10 @@ Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->grou
 
     // Tambahkan rute prodi lainnya di sini
 });
+
+// Rute untuk mahasiswa mengisi evaluasi
+Route::get('/evaluasi/{token}', [EvaluasiController::class, 'show'])->name('evaluasi.show');
+Route::post('/evaluasi/simpan', [EvaluasiController::class, 'store'])->name('evaluasi.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
