@@ -18,29 +18,28 @@
                             <table class="min-w-full divide-y divide-gray-200 border">
                                 <thead class="bg-gray-50">
                                     <tr>
-                                        <th class="px-4 py-3 text-left ... border-r">Mata Kuliah</th>
-                                        <th class="px-4 py-3 text-left ... border-r">Dosen</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Mata Kuliah</th>
+                                        <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Dosen</th>
                                         
                                         {{-- Header Kolom Pertanyaan Dibuat Dinamis --}}
                                         @foreach ($pertanyaans as $pertanyaan)
-                                            <th class="px-4 py-3 text-left ... border-r">{{ $pertanyaan->isi_pertanyaan }}</th>
+                                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">{{ $pertanyaan->isi_pertanyaan }}</th>
                                         @endforeach
                                     </tr>
                                 </thead>
                                 <tbody class="bg-white divide-y divide-gray-200">
-                                    @foreach ($mataKuliahs as $mk)
+                                    @forelse ($mataKuliahs as $mk)
                                         <tr>
-                                            <td class="px-4 py-3 border-r">{{ $mk->nama_matkul }}</td>
-                                            <td class="px-4 py-3 border-r">{{ $mk->dosen->name }}</td>
+                                            <td class="px-4 py-3 border-r">{{ $mk->mataKuliah->nama_matkul ?? 'N/A' }}</td>
+                                            <td class="px-4 py-3 border-r">{{ $mk->dosen->name ?? 'N/A' }}</td>
                                             
                                             {{-- Input Jawaban Dibuat Dinamis --}}
                                             @foreach ($pertanyaans as $pertanyaan)
                                                 <td class="px-4 py-3 border-r">
-                                                    {{-- KUNCI: name dibuat menjadi array agar mudah diproses --}}
                                                     @if ($pertanyaan->tipe_jawaban == 'numerik')
-                                                        <input type="number" name="jawaban[{{ $mk->id }}][{{ $pertanyaan->id }}]" class="w-24 border-gray-300 ... rounded-md" required>
+                                                        <input type="number" name="jawaban[{{ $mk->id }}][{{ $pertanyaan->id }}]" class="w-24 border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                                     @elseif ($pertanyaan->tipe_jawaban == 'boolean')
-                                                        <select name="jawaban[{{ $mk->id }}][{{ $pertanyaan->id }}]" class="w-full border-gray-300 ... rounded-md" required>
+                                                        <select name="jawaban[{{ $mk->id }}][{{ $pertanyaan->id }}]" class="w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
                                                             <option value="">-- Pilih --</option>
                                                             <option value="1">Ada / Sesuai</option>
                                                             <option value="0">Tidak Ada / Tidak Sesuai</option>
@@ -49,7 +48,13 @@
                                                 </td>
                                             @endforeach
                                         </tr>
-                                    @endforeach
+                                    @empty
+                                        <tr>
+                                            <td colspan="{{ 2 + $pertanyaans->count() }}" class="text-center py-4 text-gray-500">
+                                                Tidak ada data mata kuliah yang perlu dievaluasi.
+                                            </td>
+                                        </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
