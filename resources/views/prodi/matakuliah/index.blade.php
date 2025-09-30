@@ -42,6 +42,16 @@
                             </div>
                         </div>
                         <div class="mt-4">
+                            <label for="dosen_pengampu" class="block font-medium text-sm text-gray-700">Dosen Pengampu</label>
+                            <select name="dosen_pengampu[]" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" multiple required>
+                                @foreach($dosens ?? [] as $dosen)
+                                    <option value="{{ $dosen->id }}">{{ $dosen->nama_dosen }}</option>
+                                @endforeach
+                            </select>
+                            <small class="form-text text-muted">Tekan Ctrl (atau Cmd di Mac) untuk memilih lebih dari satu dosen.</small>
+                            @error('dosen_pengampu') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                        </div>
+                        <div class="mt-4">
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border rounded-md font-semibold text-xs text-white uppercase hover:bg-gray-700">
                                 Simpan
                             </button>
@@ -59,6 +69,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama Mata Kuliah</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">SKS</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Semester Ke-</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Dosen Pengampu</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                 </tr>
                             </thead>
@@ -69,6 +80,17 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $matkul->nama_matkul }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $matkul->sks }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $matkul->urutan_semester }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($matkul->dosenPengampu->count())
+                                                <ul>
+                                                    @foreach($matkul->dosenPengampu as $dosen)
+                                                        <li>{{ $dosen->nama_dosen }}</li>
+                                                    @endforeach
+                                                </ul>
+                                            @else
+                                                <span class="text-gray-400">-</span>
+                                            @endif
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center space-x-3">
                                                 <a href="{{ route('prodi.matakuliah.edit', $matkul->id) }}" class="text-indigo-600 hover:text-indigo-900">

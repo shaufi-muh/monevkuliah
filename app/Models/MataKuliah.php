@@ -19,4 +19,9 @@ class MataKuliah extends Model
     {
         return $this->belongsToMany(Kelas::class, 'kelas_mata_kuliah');
     }
+        // Relasi many-to-many ke Dosen Pengampu
+        public function dosenPengampu()
+        {
+            return $this->belongsToMany(Dosen::class, 'dosen_mata_kuliah');
+        }
 }

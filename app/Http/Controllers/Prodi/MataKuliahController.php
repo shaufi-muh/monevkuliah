@@ -13,7 +13,7 @@ class MataKuliahController extends Controller
      */
     public function index()
     {
-        $mata_kuliahs = MataKuliah::latest()->paginate(10);
+        $mata_kuliahs = MataKuliah::with('dosenPengampu')->latest()->paginate(10);
         return view('prodi.matakuliah.index', compact('mata_kuliahs'));
     }
 
@@ -22,7 +22,8 @@ class MataKuliahController extends Controller
      */
     public function create()
     {
-        //
+        $dosens = \App\Models\Dosen::orderBy('nama_dosen')->get();
+        return view('prodi.matakuliah.create', compact('dosens'));
     }
 
     /**
@@ -30,16 +31,17 @@ class MataKuliahController extends Controller
      */
     public function store(Request $request)
     {
-        // Validasi
         $request->validate([
             'kode_matkul' => 'required|string|max:10|unique:mata_kuliahs,kode_matkul',
             'nama_matkul' => 'required|string|max:255',
             'sks' => 'required|integer|min:1|max:6',
             'urutan_semester' => 'required|integer|min:1|max:8',
+            'dosen_pengampu' => 'required|array',
+            'dosen_pengampu.*' => 'exists:dosens,id',
         ]);
 
-        // Simpan ke DB
-        MataKuliah::create($request->all());
+        $matkul = MataKuliah::create($request->only(['kode_matkul','nama_matkul','sks','urutan_semester']));
+        $matkul->dosenPengampu()->attach($request->dosen_pengampu);
 
         return redirect()->route('prodi.matakuliah.index')
                          ->with('success', 'Mata kuliah berhasil ditambahkan.');
@@ -58,7 +60,9 @@ class MataKuliahController extends Controller
      */
     public function edit(MataKuliah $matakuliah)
     {
-        return view('prodi.matakuliah.edit', compact('matakuliah'));
+        $dosens = \App\Models\Dosen::orderBy('nama_dosen')->get();
+        $selectedDosen = $matakuliah->dosenPengampu->pluck('id')->toArray();
+        return view('prodi.matakuliah.edit', compact('matakuliah','dosens','selectedDosen'));
     }
 
     /**
@@ -71,9 +75,12 @@ class MataKuliahController extends Controller
             'nama_matkul' => 'required|string|max:255',
             'sks' => 'required|integer|min:1|max:6',
             'urutan_semester' => 'required|integer|min:1|max:8',
+            'dosen_pengampu' => 'required|array',
+            'dosen_pengampu.*' => 'exists:dosens,id',
         ]);
 
-        $matakuliah->update($request->all());
+        $matakuliah->update($request->only(['kode_matkul','nama_matkul','sks','urutan_semester']));
+        $matakuliah->dosenPengampu()->sync($request->dosen_pengampu);
 
         return redirect()->route('prodi.matakuliah.index')
                         ->with('success', 'Mata kuliah berhasil diperbarui.');
@@ -83,10 +90,10 @@ class MataKuliahController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(MataKuliah $matakuliah)
-{
-    $matakuliah->delete();
-
-    return redirect()->route('prodi.matakuliah.index')
-                     ->with('success', 'Mata kuliah berhasil dihapus.');
-}
+    {
+        $matakuliah->dosenPengampu()->detach();
+        $matakuliah->delete();
+        return redirect()->route('prodi.matakuliah.index')
+                         ->with('success', 'Mata kuliah berhasil dihapus.');
+    }
 }
