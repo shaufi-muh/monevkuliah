@@ -29,10 +29,15 @@ class IsiKelasController extends Controller
 
         // Mahasiswa
         $mahasiswaDiKelas = $kelas->mahasiswas()->pluck('mahasiswas.id');
+        $prodi_id = Auth::user()->prodi_id ?? (Auth::user()->prodi->id ?? null);
         $mahasiswaTersedia = Mahasiswa::query()
+            ->where('prodi_id', $prodi_id)
             ->whereNotIn('id', $mahasiswaDiKelas)
             ->when($request->search, function ($query, $search) {
-                $query->where('nama', 'like', "%{$search}%")->orWhere('nim', 'like', "%{$search}%");
+                $query->where(function($q) use ($search) {
+                    $q->where('nama', 'like', "%{$search}%")
+                      ->orWhere('nim', 'like', "%{$search}%");
+                });
             })
             ->get();
 
