@@ -19,4 +19,9 @@ class TahunAkademik extends Model
     {
         return $this->hasMany(Kuisioner::class);
     }
+
+    public function mahasiswaSemesters()
+    {
+        return $this->hasMany(MahasiswaSemester::class);
+    }
 }

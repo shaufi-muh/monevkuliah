@@ -14,4 +14,14 @@ class MahasiswaSemester extends Model
         'tahun_akademik_id',
         'status_mahasiswa',
     ];
+
+    public function mahasiswa()
+    {
+        return $this->belongsTo(Mahasiswa::class);
+    }
+
+    public function tahunAkademik()
+    {
+        return $this->belongsTo(TahunAkademik::class);
+    }
 }

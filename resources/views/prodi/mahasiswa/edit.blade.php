@@ -30,13 +30,13 @@
                                 <input type="text" name="no_telp" value="{{ old('no_telp', $mahasiswa->no_telp) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                             </div>
                             <div>
-                                <label for="status" class="block font-medium text-sm text-gray-700">Status Mahasiswa</label>
-                                <select name="status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
-                                    <option value="aktif" {{ old('status', $mahasiswa->status) == 'aktif' ? 'selected' : '' }}>Aktif</option>
-                                    <option value="tidak_aktif" {{ old('status', $mahasiswa->status) == 'tidak_aktif' ? 'selected' : '' }}>Tidak Aktif</option>
-                                    <option value="cuti" {{ old('status', $mahasiswa->status) == 'cuti' ? 'selected' : '' }}>Cuti</option>
+                                <label for="status_mahasiswa" class="block font-medium text-sm text-gray-700">Status Mahasiswa (Tahun Akademik Aktif)</label>
+                                <select name="status_mahasiswa" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                    <option value="Aktif" {{ old('status_mahasiswa', $pivot ? $pivot->status_mahasiswa : '') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="Cuti" {{ old('status_mahasiswa', $pivot ? $pivot->status_mahasiswa : '') == 'Cuti' ? 'selected' : '' }}>Cuti</option>
+                                    <option value="Non-Aktif" {{ old('status_mahasiswa', $pivot ? $pivot->status_mahasiswa : '') == 'Non-Aktif' ? 'selected' : '' }}>Non-Aktif</option>
                                 </select>
-                                @error('status') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                                @error('status_mahasiswa') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="mt-4 flex items-center gap-4">

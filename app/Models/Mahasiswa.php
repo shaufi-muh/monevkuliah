@@ -11,6 +11,7 @@ class Mahasiswa extends Model
     use HasFactory;
     
     protected $fillable = [
+        'prodi_id',
         'nim',
         'nama',
         'email',
@@ -31,5 +32,10 @@ class Mahasiswa extends Model
     public function prodi()
     {
         return $this->belongsTo(Prodi::class);
+    }
+
+    public function mahasiswaSemesters()
+    {
+        return $this->hasMany(MahasiswaSemester::class);
     }
 }
