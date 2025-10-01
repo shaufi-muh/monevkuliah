@@ -28,4 +28,10 @@ class Dosen extends Model
     {
         return $this->belongsTo(Prodi::class);
     }
+
+    // Relasi many-to-many ke MataKuliah sebagai pengampu
+    public function mataKuliahPengampu()
+    {
+        return $this->belongsToMany(MataKuliah::class, 'dosen_mata_kuliah');
+    }
 }
