@@ -13,6 +13,7 @@ class Prodi extends Model
         'jenjang_pendidikan',
         'akronim_prodi',
         'jurusan_id',
+        'pbl_applied', // value: 'YA' or 'TIDAK'
     ];
 
     public function jurusan()

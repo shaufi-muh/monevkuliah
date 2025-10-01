@@ -15,7 +15,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('tahun_akademik_id')
               ->nullable() // Dibuat nullable agar tidak error jika sudah ada data
-              ->after('id')
               ->constrained('tahun_akademiks');
             $table->foreignId('prodi_id')->constrained('prodis');
             $table->integer('urutan_semester');

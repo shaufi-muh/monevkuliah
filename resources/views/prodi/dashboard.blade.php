@@ -29,6 +29,7 @@
             @php
                 $prodiId = Auth::user()->prodi_id ?? null;
                 $tahunAkademikAktif = null;
+                $prodi = null;
                 if ($prodiId) {
                     $prodi = \App\Models\Prodi::find($prodiId);
                     if ($prodi && $prodi->jurusan_id) {
@@ -49,6 +50,35 @@
                     <span class="font-semibold text-red-600">Periode Tahun Akademik Belum Diaktifkan. Harap Hubungi Admin Jurusan.</span>
                 </div>
             @endif
-        </div>   
+
+            <!-- PBL Checkbox Section -->
+            @if($prodi)
+            <div class="mt-8">
+                <div class="flex items-center">
+                    <input type="checkbox" id="pbl_applied" name="pbl_applied" value="YA" {{ $prodi->pbl_applied == 'YA' ? 'checked' : '' }} class="mr-2" onchange="updatePBL(this)">
+                    <label for="pbl_applied" class="font-medium text-gray-700">Prodi ini menerapkan Kurikulum Berbasis PBL (Project Based Learning)</label>
+                </div>
+                <span id="pbl-status" class="ml-2 text-sm text-gray-600">Status: <b>{{ $prodi->pbl_applied == 'YA' ? 'YA' : 'TIDAK' }}</b></span>
+            </div>
+            <script>
+            function updatePBL(checkbox) {
+                fetch("{{ route('prodi.dashboard.pbl') }}", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        pbl_applied: checkbox.checked ? 'YA' : 'TIDAK'
+                    })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    document.getElementById('pbl-status').innerHTML = 'Status: <b>' + (checkbox.checked ? 'YA' : 'TIDAK') + '</b>';
+                });
+            }
+            </script>
+            @endif
+        </div>
     </div>
 </x-app-layout>

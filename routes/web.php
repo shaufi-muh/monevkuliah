@@ -57,8 +57,18 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
 // Grup Rute untuk PRODI
 Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->group(function () {
     Route::get('/dashboard', function () {
-        return view('prodi.dashboard'); // Buat view di resources/views/prodi/dashboard.blade.php
+        return view('prodi.dashboard');
     })->name('dashboard');
+
+    Route::post('/dashboard/pbl', function() {
+        $user = auth()->user();
+        $prodi = \App\Models\Prodi::find($user->prodi_id ?? null);
+        if ($prodi) {
+            $prodi->pbl_applied = request('pbl_applied') === 'YA' ? 'YA' : 'TIDAK';
+            $prodi->save();
+        }
+        return response()->json(['status' => $prodi ? $prodi->pbl_applied : 'TIDAK']);
+    })->name('dashboard.pbl');
 
 
     Route::resource('dosen', DosenController::class);
