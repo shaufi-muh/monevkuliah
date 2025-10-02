@@ -7,11 +7,12 @@ use Illuminate\Database\Seeder;
 use App\Models\Jurusan;
 use App\Models\Prodi;
 use App\Models\Dosen;
+use App\Models\TahunAkademik;
 use App\Models\Mahasiswa;
 use App\Models\MataKuliah;
 use App\Models\Kelas;
-//use App\Models\Kuisioner;
-//use App\Models\Pertanyaan;
+use App\Models\Kuisioner;
+use App\Models\Pertanyaan;
 //use App\Models\Jawaban;
 use App\Models\User;
 
@@ -33,11 +34,12 @@ class DatabaseSeeder extends Seeder
                 JurusanSeeder::class,
                 ProdiSeeder::class,
                 DosenSeeder::class,
+                TahunAkademikSeeder::class,
                 MahasiswaSeeder::class,
                 MataKuliahSeeder::class,
                 KelasSeeder::class,
-                //KuisionerSeeder::class,
-                //PertanyaanSeeder::class,
+                KuisionerSeeder::class,
+                PertanyaanSeeder::class,
                 //JawabanSeeder::class,
                 UserSeeder::class,
                 
