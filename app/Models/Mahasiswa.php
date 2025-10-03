@@ -38,4 +38,10 @@ class Mahasiswa extends Model
     {
         return $this->hasMany(MahasiswaSemester::class);
     }
+
+    // Relasi kelas berdasarkan tahun akademik (pivot harus punya tahun_akademik_id)
+    public function kelasTahunAkademik($tahunAkademikId)
+    {
+        return $this->kelas()->wherePivot('tahun_akademik_id', $tahunAkademikId);
+    }
 }

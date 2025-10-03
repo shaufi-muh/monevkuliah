@@ -42,7 +42,12 @@ class MataKuliahController extends Controller
         ]);
 
         $matkul = MataKuliah::create($request->only(['kode_matkul','nama_matkul','sks','urutan_semester']));
-        $matkul->dosenPengampu()->attach($request->dosen_pengampu);
+        $tahunAkademikAktif = \App\Models\TahunAkademik::where('status', 'aktif')->first();
+        $pivotData = [];
+        foreach ($request->dosen_pengampu as $dosenId) {
+            $pivotData[$dosenId] = ['tahun_akademik_id' => $tahunAkademikAktif ? $tahunAkademikAktif->id : null];
+        }
+        $matkul->dosenPengampu()->attach($pivotData);
 
         return redirect()->route('prodi.matakuliah.index')
                          ->with('success', 'Mata kuliah berhasil ditambahkan.');
@@ -81,7 +86,12 @@ class MataKuliahController extends Controller
         ]);
 
         $matakuliah->update($request->only(['kode_matkul','nama_matkul','sks','urutan_semester']));
-        $matakuliah->dosenPengampu()->sync($request->dosen_pengampu);
+        $tahunAkademikAktif = \App\Models\TahunAkademik::where('status', 'aktif')->first();
+        $pivotData = [];
+        foreach ($request->dosen_pengampu as $dosenId) {
+            $pivotData[$dosenId] = ['tahun_akademik_id' => $tahunAkademikAktif ? $tahunAkademikAktif->id : null];
+        }
+        $matakuliah->dosenPengampu()->sync($pivotData);
 
         return redirect()->route('prodi.matakuliah.index')
                         ->with('success', 'Mata kuliah berhasil diperbarui.');
