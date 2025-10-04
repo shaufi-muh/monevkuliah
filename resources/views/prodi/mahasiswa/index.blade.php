@@ -40,6 +40,15 @@
                                 <input type="text" name="no_telp" value="{{ old('no_telp') }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                                 @error('no_telp') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
+                            <div>
+                                <label for="status_mahasiswa" class="block font-medium text-sm text-gray-700">Status Mahasiswa</label>
+                                <select name="status_mahasiswa" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                    <option value="Aktif" {{ old('status_mahasiswa') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="Cuti" {{ old('status_mahasiswa') == 'Cuti' ? 'selected' : '' }}>Cuti</option>
+                                    <option value="Non-Aktif" {{ old('status_mahasiswa') == 'Non-Aktif' ? 'selected' : '' }}>Non-Aktif</option>
+                                </select>
+                                @error('status_mahasiswa') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                            </div>
                         </div>
                         <div class="mt-4">
                             <button type="submit" class="inline-flex items-center px-4 py-2 bg-gray-800 border rounded-md font-semibold text-xs text-white uppercase hover:bg-gray-700">
@@ -59,6 +68,7 @@
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Email</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">No. Telp. / Hp</th>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Aksi</th>
                                 </tr>
                             </thead>
@@ -69,6 +79,19 @@
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $mhs->nama }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $mhs->email }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $mhs->no_telp }}</td>
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @php
+                                                $tahunAkademikAktif = \App\Models\TahunAkademik::where('status', 'aktif')->first();
+                                                $pivot = $tahunAkademikAktif ? $mhs->mahasiswaSemesters->where('tahun_akademik_id', $tahunAkademikAktif->id)->first() : null;
+                                            @endphp
+                                            @if($pivot)
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full {{ $pivot->status_mahasiswa == 'Aktif' ? 'bg-green-100 text-green-800' : ($pivot->status_mahasiswa == 'Cuti' ? 'bg-yellow-100 text-yellow-800' : 'bg-red-100 text-red-800') }}">
+                                                    {{ $pivot->status_mahasiswa }}
+                                                </span>
+                                            @else
+                                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">Tidak Ada Data</span>
+                                            @endif
+                                        </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
                                             <div class="flex items-center space-x-3">
                                             <a href="{{ route('prodi.mahasiswa.edit', $mhs->id) }}" class="text-indigo-600 hover:text-indigo-900">

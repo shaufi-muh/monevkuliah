@@ -12,6 +12,7 @@ use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
 use App\Http\Controllers\Prodi\KelasController;
 use App\Http\Controllers\Prodi\IsiKelasController;
+use App\Http\Controllers\EvaluasiController; // <-- Tambahkan ini
 
 
 
@@ -41,9 +42,7 @@ Route::get('/dashboard', function () {
 
 // Grup Rute untuk JURUSAN
 Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')->group(function () {
-    Route::get('/dashboard', function () {
-        return view('jurusan.dashboard'); // Buat view di resources/views/jurusan/dashboard.blade.php
-    })->name('dashboard');
+    Route::get('/dashboard', [TahunAkademikController::class, 'dashboard'])->name('dashboard');
     // Tambahkan rute jurusan lainnya di sini
 
     Route::resource('dataprodi', DataProdiController::class);
@@ -66,8 +65,18 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
 // Grup Rute untuk PRODI
 Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->group(function () {
     Route::get('/dashboard', function () {
-        return view('prodi.dashboard'); // Buat view di resources/views/prodi/dashboard.blade.php
+        return view('prodi.dashboard');
     })->name('dashboard');
+
+    Route::post('/dashboard/pbl', function() {
+        $user = auth()->user();
+        $prodi = \App\Models\Prodi::find($user->prodi_id ?? null);
+        if ($prodi) {
+            $prodi->pbl_applied = request('pbl_applied') === 'YA' ? 'YA' : 'TIDAK';
+            $prodi->save();
+        }
+        return response()->json(['status' => $prodi ? $prodi->pbl_applied : 'TIDAK']);
+    })->name('dashboard.pbl');
 
 
     Route::resource('dosen', DosenController::class);
@@ -90,6 +99,10 @@ Route::middleware(['auth', 'role:prodi'])->prefix('prodi')->name('prodi.')->grou
 
     // Tambahkan rute prodi lainnya di sini
 });
+
+// Rute untuk mahasiswa mengisi evaluasi
+Route::get('/evaluasi/{token}', [EvaluasiController::class, 'show'])->name('evaluasi.show');
+Route::post('/evaluasi/simpan', [EvaluasiController::class, 'store'])->name('evaluasi.store');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

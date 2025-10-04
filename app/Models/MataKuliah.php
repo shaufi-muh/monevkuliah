@@ -12,11 +12,16 @@ class MataKuliah extends Model
         'kode_matkul',
         'nama_matkul',
         'sks',
-        'tahun',
+        'urutan_semester',
     ];
     // Relasi many-to-many ke Kelas
     public function kelas()
     {
         return $this->belongsToMany(Kelas::class, 'kelas_mata_kuliah');
     }
+        // Relasi many-to-many ke Dosen Pengampu
+        public function dosenPengampu()
+        {
+            return $this->belongsToMany(Dosen::class, 'dosen_mata_kuliah');
+        }
 }

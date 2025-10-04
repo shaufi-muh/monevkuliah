@@ -9,6 +9,21 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 bg-white border-b border-gray-200">
+                    <!-- logika untuk menampilkan tahun akademik aktif 
+                        <div class="mb-4 text-left">
+                            @if(isset($tahunAkademikAktif) && $tahunAkademikAktif)
+                                <div class="mt-2 p-2 bg-blue-50 border-blue-200 rounded">
+                                    <span class="font-semibold">Tahun Akademik Aktif:</span>
+                                    <span class="ml-2">{{ $tahunAkademikAktif->tahun_akademik }} ({{ $tahunAkademikAktif->semester }})</span>
+                                </div>
+                            @else
+                                <div class="mt-2 p-2 bg-red-50 border-red-200 rounded">
+                                    <span class="font-semibold text-red-600">Belum ada tahun akademik aktif!</span>
+                                </div>
+                            @endif
+                        </div>
+                    -->
+
                     <div class="mb-4 text-right">
                         <a href="{{ route('jurusan.kuisioner.create') }}" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 active:bg-gray-900 focus:outline-none focus:border-gray-900 focus:ring ring-gray-300 disabled:opacity-25 transition ease-in-out duration-150">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 mr-2 -ml-1">
@@ -17,7 +32,6 @@
                         Set Kuisioner
                         </a>
                     </div>
-                    
                     @if(session('success'))
                         <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded" role="alert">
                             {{ session('success') }}

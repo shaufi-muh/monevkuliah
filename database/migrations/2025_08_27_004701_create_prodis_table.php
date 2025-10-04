@@ -13,11 +13,10 @@ return new class extends Migration
     {
         Schema::create('prodis', function (Blueprint $table) {
             $table->id();
-            
             $table->string('nama_prodi');
             $table->string('kode_prodi');
             $table->string('akronim_prodi');
-
+            $table->string('pbl_applied')->default('TIDAK'); // PBL checkbox, value: YA/TIDAK
             $table->timestamps();
         });
     }

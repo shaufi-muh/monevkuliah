@@ -13,7 +13,7 @@
                         @csrf
                         @method('PATCH')
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                           <div>
+                            <div>
                                 <label for="nim">NIM</label>
                                 <input type="text" name="nim" value="{{ old('nim', $mahasiswa->nim) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm" required>
                             </div>
@@ -28,6 +28,15 @@
                             <div>
                                 <label for="no_telp">No. Telepon</label>
                                 <input type="text" name="no_telp" value="{{ old('no_telp', $mahasiswa->no_telp) }}" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                            </div>
+                            <div>
+                                <label for="status_mahasiswa" class="block font-medium text-sm text-gray-700">Status Mahasiswa (Tahun Akademik Aktif)</label>
+                                <select name="status_mahasiswa" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
+                                    <option value="Aktif" {{ old('status_mahasiswa', $pivot ? $pivot->status_mahasiswa : '') == 'Aktif' ? 'selected' : '' }}>Aktif</option>
+                                    <option value="Cuti" {{ old('status_mahasiswa', $pivot ? $pivot->status_mahasiswa : '') == 'Cuti' ? 'selected' : '' }}>Cuti</option>
+                                    <option value="Non-Aktif" {{ old('status_mahasiswa', $pivot ? $pivot->status_mahasiswa : '') == 'Non-Aktif' ? 'selected' : '' }}>Non-Aktif</option>
+                                </select>
+                                @error('status_mahasiswa') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
                             </div>
                         </div>
                         <div class="mt-4 flex items-center gap-4">

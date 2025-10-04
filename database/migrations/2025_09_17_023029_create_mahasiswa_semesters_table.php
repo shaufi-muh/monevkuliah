@@ -13,13 +13,13 @@ return new class extends Migration
     {
         Schema::create('mahasiswa_semesters', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->foreignId('tahun_akademik_id')->constrained('semester_akademiks')->onDelete('cascade');
+            $table->foreignId('mahasiswa_id')->constrained('mahasiswas')->onDelete('cascade');
+            $table->foreignId('tahun_akademik_id')->constrained('tahun_akademiks')->onDelete('cascade');
             $table->enum('status_mahasiswa', ['Aktif', 'Cuti', 'Non-Aktif'])->default('Non-Aktif');
             $table->timestamps();
 
             // Kunci: Mencegah duplikasi data. Satu mahasiswa hanya bisa punya satu status per tahun.
-            $table->unique(['user_id', 'tahun_akademik_id']);
+            $table->unique(['mahasiswa_id', 'tahun_akademik_id']);
         });
     }
 
