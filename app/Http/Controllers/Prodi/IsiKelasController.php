@@ -60,7 +60,10 @@ class IsiKelasController extends Controller
     public function addMataKuliah(Request $request, Kelas $kelas)
     {
         $request->validate(['mata_kuliah_id' => 'required|exists:mata_kuliahs,id']);
-        $kelas->mataKuliahs()->syncWithoutDetaching([$request->mata_kuliah_id]);
+        $tahunAkademikAktif = \App\Models\TahunAkademik::where('status', 'aktif')->first();
+        $kelas->mataKuliahs()->attach($request->mata_kuliah_id, [
+            'tahun_akademik_id' => $tahunAkademikAktif ? $tahunAkademikAktif->id : null
+        ]);
         return back()->with('success', 'Mata kuliah berhasil ditambahkan.')->with('tab', 'matkul');
     }
 
@@ -96,8 +99,10 @@ class IsiKelasController extends Controller
         }
 
         // Jika lolos pemeriksaan, baru tambahkan mahasiswa ke kelas
-        $kelas->mahasiswas()->attach($mahasiswaId);
-
+        $tahunAkademikAktif = \App\Models\TahunAkademik::where('status', 'aktif')->first();
+        $kelas->mahasiswas()->attach($mahasiswaId, [
+            'tahun_akademik_id' => $tahunAkademikAktif ? $tahunAkademikAktif->id : null
+        ]);
         return back()->with('success', 'Mahasiswa berhasil ditambahkan.');
     }
 

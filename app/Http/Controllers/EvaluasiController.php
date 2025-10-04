@@ -36,7 +36,78 @@ class EvaluasiController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        // 1. Validasi token
+        $token = $request->input('token');
+        $evaluasiToken = EvaluasiToken::where('token', $token)->whereNull('digunakan_pada')->first();
+        if (!$evaluasiToken) {
+            return back()->withErrors(['token' => 'Token tidak valid atau sudah digunakan.']);
+        }
+
+        // 2. Ambil data jawaban dari request
+        $jawabanData = $request->input('jawaban');
+        if (!$jawabanData || !is_array($jawabanData)) {
+            return back()->withErrors(['jawaban' => 'Jawaban tidak ditemukan.']);
+        }
+
+        // 3. Ambil semua ID pertanyaan dan tipe jawabannya sekali saja
+        $pertanyaanIds = [];
+        foreach ($jawabanData as $matkuls) {
+            foreach ($matkuls as $pertanyaans) {
+                $pertanyaanIds = array_merge($pertanyaanIds, array_keys($pertanyaans));
+            }
+        }
+        $pertanyaanTipeMap = Pertanyaan::whereIn('id', array_unique($pertanyaanIds))->pluck('tipe_jawaban', 'id');
+
+        // Ambil semua ID matkul dan dosen pengampunya sekali saja
+        $matkulIds = [];
+        foreach ($jawabanData as $matkuls) {
+            $matkulIds = array_merge($matkulIds, array_keys($matkuls));
+        }
+        $matkulsWithDosen = MataKuliah::with('dosenPengampu')->whereIn('id', array_unique($matkulIds))->get()->keyBy('id');
+
+        // 4. Siapkan data untuk bulk insert
+        $bulkJawaban = [];
+        $now = now();
+
+        foreach ($jawabanData as $kelasId => $matkuls) {
+            foreach ($matkuls as $matkulId => $pertanyaans) {
+                $dosenIds = $matkulsWithDosen->get($matkulId)->dosenPengampu->pluck('id')->all();
+                if (empty($dosenIds)) {
+                    $dosenIds = [null]; // Tetap proses meski tidak ada dosen, untuk jawaban yg tidak terkait dosen
+                }
+
+                foreach ($pertanyaans as $pertanyaanId => $value) {
+                    $tipeJawaban = $pertanyaanTipeMap->get($pertanyaanId);
+                    if (!$tipeJawaban) continue; // Lewati jika pertanyaan tidak ditemukan
+
+                    foreach ($dosenIds as $dosenId) {
+                        $bulkJawaban[] = [
+                            'pertanyaan_id'    => $pertanyaanId,
+                            'dosen_id'         => $dosenId,
+                            'matakuliah_id'    => $matkulId,
+                            'jawaban_boolean'  => $tipeJawaban == 'boolean' ? $value : 0,
+                            'jawaban_numerik'  => $tipeJawaban == 'numerik' ? $value : null,
+                            'jawaban_text'     => $tipeJawaban == 'text' ? $value : null,
+                            'jawaban_tanggal'  => $tipeJawaban == 'tanggal' ? $value : null,
+                            'created_at'       => $now,
+                            'updated_at'       => $now,
+                        ];
+                    }
+                }
+            }
+        }
+
+        // 5. Simpan semua jawaban dalam satu query & tandai token
+        if (!empty($bulkJawaban)) {
+            // Gunakan model Jawaban untuk insert
+            \App\Models\Jawaban::insert($bulkJawaban);
+        }
+
+        $evaluasiToken->digunakan_pada = $now;
+        $evaluasiToken->save();
+
+        // 6. Redirect ke halaman sukses
+        return view('evaluasi.sukses');
     }
 
     /**
@@ -67,10 +138,9 @@ class EvaluasiController extends Controller
         }
         // b. Ambil semua kelas yang diikuti oleh mahasiswa INI pada semester AKTIF ITU
         // Ini membutuhkan relasi yang tepat di Model Mahasiswa
-        $kelasYangDiikuti = $mahasiswa->kelas()
-                                    ->where('tahun_akademik_id', $tahunAkademikAktif->id)
-                                    ->with('mataKuliah', 'dosen') // Ambil juga info matkul & dosen
-                                    ->get();
+            $kelasYangDiikuti = $mahasiswa->kelasTahunAkademik($tahunAkademikAktif->id)
+                ->with('mataKuliahs.dosenPengampu') // Eager load relasi dosen pengampu dari mata kuliah
+                ->get();                            
 
         // 5. Kirim semua data ke view
         //return view('evaluasi.show', compact('evaluasiToken', 'mahasiswa', 'pertanyaans', 'mataKuliahs'));

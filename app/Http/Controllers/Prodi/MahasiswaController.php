@@ -13,7 +13,14 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        $mahasiswas = Mahasiswa::latest()->paginate(10);
+        $user = auth()->user();
+        // Pastikan hanya user dengan role 'prodi' yang bisa akses
+        if ($user->role !== 'prodi') {
+            abort(403, 'Akses hanya untuk role prodi');
+        }
+        $mahasiswas = Mahasiswa::where('prodi_id', $user->prodi_id)
+            ->latest()
+            ->paginate(10);
         return view('prodi.mahasiswa.index', compact('mahasiswas'));
     }
 
