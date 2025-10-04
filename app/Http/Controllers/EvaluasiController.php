@@ -49,45 +49,65 @@ class EvaluasiController extends Controller
             return back()->withErrors(['jawaban' => 'Jawaban tidak ditemukan.']);
         }
 
-        // 3. Simpan semua jawaban secara anonim
-        // Format: jawaban[kelas_id][matkul_id][pertanyaan_id] = value
+        // 3. Ambil semua ID pertanyaan dan tipe jawabannya sekali saja
+        $pertanyaanIds = [];
+        foreach ($jawabanData as $matkuls) {
+            foreach ($matkuls as $pertanyaans) {
+                $pertanyaanIds = array_merge($pertanyaanIds, array_keys($pertanyaans));
+            }
+        }
+        $pertanyaanTipeMap = Pertanyaan::whereIn('id', array_unique($pertanyaanIds))->pluck('tipe_jawaban', 'id');
+
+        // Ambil semua ID matkul dan dosen pengampunya sekali saja
+        $matkulIds = [];
+        foreach ($jawabanData as $matkuls) {
+            $matkulIds = array_merge($matkulIds, array_keys($matkuls));
+        }
+        $matkulsWithDosen = MataKuliah::with('dosenPengampu')->whereIn('id', array_unique($matkulIds))->get()->keyBy('id');
+
+        // 4. Siapkan data untuk bulk insert
+        $bulkJawaban = [];
+        $now = now();
+
         foreach ($jawabanData as $kelasId => $matkuls) {
             foreach ($matkuls as $matkulId => $pertanyaans) {
-                foreach ($pertanyaans as $pertanyaanId => $value) {
-                    // Ambil pertanyaan untuk tipe
-                    $pertanyaan = \App\Models\Pertanyaan::find($pertanyaanId);
-                    if (!$pertanyaan) continue;
+                $dosenIds = $matkulsWithDosen->get($matkulId)->dosenPengampu->pluck('id')->all();
+                if (empty($dosenIds)) {
+                    $dosenIds = [null]; // Tetap proses meski tidak ada dosen, untuk jawaban yg tidak terkait dosen
+                }
 
-                    // Ambil dosen pengampu dari matkul (bisa lebih dari satu, simpan satu-satu)
-                    $matkul = \App\Models\MataKuliah::find($matkulId);
-                    if (!$matkul) continue;
-                    $dosenPengampu = $matkul->dosenPengampu;
-                    if ($dosenPengampu->isEmpty()) {
-                        // Jika tidak ada dosen, tetap simpan dengan dosen_id null
-                        $dosenIds = [null];
-                    } else {
-                        $dosenIds = $dosenPengampu->pluck('id')->toArray();
-                    }
+                foreach ($pertanyaans as $pertanyaanId => $value) {
+                    $tipeJawaban = $pertanyaanTipeMap->get($pertanyaanId);
+                    if (!$tipeJawaban) continue; // Lewati jika pertanyaan tidak ditemukan
+
                     foreach ($dosenIds as $dosenId) {
-                        \App\Models\Jawaban::create([
+                        $bulkJawaban[] = [
                             'pertanyaan_id'    => $pertanyaanId,
                             'dosen_id'         => $dosenId,
                             'matakuliah_id'    => $matkulId,
-                            'real_pertemuan'   => 0, // Jika ada input real pertemuan, ambil dari request
-                            'jawaban_boolean'  => $pertanyaan->tipe_jawaban == 'boolean' ? $value : null,
-                            'keterangan'       => $pertanyaan->tipe_jawaban == 'numerik' ? $value : null,
-                        ]);
+                            'jawaban_boolean'  => $tipeJawaban == 'boolean' ? $value : 0,
+                            'jawaban_numerik'  => $tipeJawaban == 'numerik' ? $value : null,
+                            'jawaban_text'     => $tipeJawaban == 'text' ? $value : null,
+                            'jawaban_tanggal'  => $tipeJawaban == 'tanggal' ? $value : null,
+                            'created_at'       => $now,
+                            'updated_at'       => $now,
+                        ];
                     }
                 }
             }
         }
 
-        // 4. Tandai token sebagai sudah digunakan
-        $evaluasiToken->digunakan_pada = now();
+        // 5. Simpan semua jawaban dalam satu query & tandai token
+        if (!empty($bulkJawaban)) {
+            // Gunakan model Jawaban untuk insert
+            \App\Models\Jawaban::insert($bulkJawaban);
+        }
+
+        $evaluasiToken->digunakan_pada = $now;
         $evaluasiToken->save();
 
-        // 5. Redirect dengan pesan sukses
-        return redirect()->route('evaluasi.show', $token)->with('success', 'Jawaban evaluasi berhasil disimpan. Terima kasih!');
+        // 6. Redirect ke halaman sukses
+        return view('evaluasi.sukses');
     }
 
     /**
