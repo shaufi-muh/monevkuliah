@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Jurusan\DataProdiController;
 use App\Http\Controllers\Jurusan\UserProdiController;
+use App\Http\Controllers\Jurusan\TahunAkademikController;
 use App\Http\Controllers\Jurusan\KuisionerController;
 use App\Http\Controllers\Jurusan\PertanyaanController;
 use App\Http\Controllers\Jurusan\BroadcastController;
