@@ -66,6 +66,32 @@ class BroadcastController extends Controller
             ]);
         }
 
+        $client = new Client(); // Inisialisasi Guzzle
+
+        foreach ($mahasiswaList as $mhs) {
+            $token = bin2hex(random_bytes(16));
+            SesiEvaluasi::create([
+                'mahasiswa_nim' => $mhs->nim,
+                'kuisioner_id' => $kuisioner->id,
+                'tahun_akademik' => $tahunAkademik,
+                'token_utama' => $token,
+            ]);
+
+            // Kirim pesan WhatsApp ke WA Gateway
+            $payload = [
+                'number' => $mhs->no_telp, // pastikan field nomor WA benar
+                'message' => "Halo {$mhs->nama}, silakan isi evaluasi kuliah di tautan berikut: " . url("/evaluasi/{$token}")
+            ];
+
+            try {
+                $client->post('http://localhost:5001/send-message', [
+                    'json' => $payload
+                ]);
+            } catch (\Exception $e) {
+                // Optional: log error atau tampilkan pesan gagal kirim
+            }
+        }
+
         return back()->with('success', 'Proses pengiriman tautan evaluasi dan pencatatan historis berhasil.');
     }
 
