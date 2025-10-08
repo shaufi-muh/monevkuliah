@@ -10,7 +10,7 @@
                     <p class="mb-6 text-center">Silakan isi evaluasi untuk setiap mata kuliah di bawah ini.</p>
                     <form action="{{ route('evaluasi.store') }}" method="POST" class="space-y-4">
                         @csrf
-                        <input type="hidden" name="token" value="{{ $evaluasiToken->token }}">
+                        <input type="hidden" name="token" value="{{ $evaluasiToken->token_utama }}">
                         <div class="overflow-x-auto">
                             <table class="w-full divide-y divide-gray-200 border text-xs sm:text-sm" style="min-width:900px;">
                                 <thead class="bg-gray-50">

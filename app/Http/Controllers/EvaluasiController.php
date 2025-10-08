@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Models\EvaluasiToken;
+use App\Models\SesiEvaluasi;
 use App\Models\Mahasiswa;
 use App\Models\Kuisioner;
 use App\Models\Pertanyaan;
@@ -12,6 +12,7 @@ use App\Models\Kelas;
 use App\Models\TahunAkademik;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class EvaluasiController extends Controller
 {
@@ -36,21 +37,27 @@ class EvaluasiController extends Controller
      */
     public function store(Request $request)
     {
-        // 1. Validasi token
+        // 1. Validasi Input dari Form (Server-side)
+        $request->validate([
+            'token' => 'required|string',
+            'jawaban' => 'required|array',
+            'jawaban.*.*.*' => 'required', // Memastikan setiap pertanyaan dijawab
+        ], [
+            'jawaban.*.*.*.required' => 'Semua pertanyaan wajib diisi.' // Custom error message
+        ]);
+
+        // 2. Validasi Token & Status
         $token = $request->input('token');
-        $evaluasiToken = EvaluasiToken::where('token', $token)->whereNull('digunakan_pada')->first();
-        if (!$evaluasiToken) {
-            return back()->withErrors(['token' => 'Token tidak valid atau sudah digunakan.']);
+        $evaluasiToken = SesiEvaluasi::where('token_utama', $token)->first();
+
+        $statusExists = DB::table('status_evaluasi')->where('sesi_evaluasi_id', $evaluasiToken->id ?? null)->exists();
+
+        if (!$evaluasiToken || $statusExists) {
+            return back()->withErrors(['token' => 'Token tidak valid atau sesi evaluasi ini telah selesai.']);
         }
 
-        // 2. Ambil data jawaban dari request
+        // 3. Ambil data jawaban dari request
         $jawabanData = $request->input('jawaban');
-        if (!$jawabanData || !is_array($jawabanData)) {
-            return back()->withErrors(['jawaban' => 'Jawaban tidak ditemukan.']);
-        }
-
-        // 3. Ambil semua ID pertanyaan dan tipe jawabannya sekali saja
-        $pertanyaanIds = [];
         foreach ($jawabanData as $matkuls) {
             foreach ($matkuls as $pertanyaans) {
                 $pertanyaanIds = array_merge($pertanyaanIds, array_keys($pertanyaans));
@@ -97,14 +104,17 @@ class EvaluasiController extends Controller
             }
         }
 
-        // 5. Simpan semua jawaban dalam satu query & tandai token
+        // 5. Simpan semua jawaban & tandai sesi sebagai selesai
         if (!empty($bulkJawaban)) {
-            // Gunakan model Jawaban untuk insert
             \App\Models\Jawaban::insert($bulkJawaban);
         }
 
-        $evaluasiToken->digunakan_pada = $now;
-        $evaluasiToken->save();
+        // Buat record di status_evaluasi untuk menandai sesi ini selesai
+        DB::table('status_evaluasi')->insert([
+            'sesi_evaluasi_id' => $evaluasiToken->id,
+            'created_at' => $now,
+            'updated_at' => $now,
+        ]);
 
         // 6. Redirect ke halaman sukses
         return view('evaluasi.sukses');
@@ -116,9 +126,16 @@ class EvaluasiController extends Controller
     public function show($token)
     {
         // 1. Validasi token
-        $evaluasiToken = EvaluasiToken::where('token', $token)->whereNull('digunakan_pada')->firstOrFail();
+        $evaluasiToken = SesiEvaluasi::where('token_utama', $token)->firstOrFail();
 
-        // 2. Ambil data yang relevan dari token
+        // 2. Cek apakah evaluasi untuk sesi ini sudah pernah diisi
+        $statusExists = DB::table('status_evaluasi')->where('sesi_evaluasi_id', $evaluasiToken->id)->exists();
+        if ($statusExists) {
+            // Jika ingin menampilkan halaman khusus, buat view-nya. Abort lebih simpel.
+            return abort(403, 'Terima kasih, Anda sudah menyelesaikan evaluasi untuk sesi ini.');
+        }
+
+        // 3. Ambil data yang relevan dari token
         $mahasiswa = $evaluasiToken->mahasiswa;
         $kuisioner = $evaluasiToken->kuisioner;
         

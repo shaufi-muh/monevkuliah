@@ -12,22 +12,16 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('status_evaluasi', function (Blueprint $table) {
-        $table->id();
+            $table->id();
 
-        // Identitas unik untuk setiap mahasiswa di setiap kelas/matkul
-        $table->string('mahasiswa_nim');
-        $table->foreign('mahasiswa_nim')->references('nim')->on('mahasiswas');
-        $table->foreignId('matakuliah_id')->constrained('mata_kuliahs');
+            // Foreign key yang merujuk langsung ke sesi evaluasi yang dibuat
+            $table->foreignId('sesi_evaluasi_id')->constrained('sesi_evaluasi')->onDelete('cascade');
 
-        // "Tiket" unik yang akan dikirim ke mahasiswa
-        // $table->string('token')->unique();
-        // gak jadi dipakai karena token_utama di sesi_evaluasi sudah cukup
+            // Status untuk melacak proses, 'selesai' sudah cukup
+            $table->string('status')->default('selesai');
 
-        // Status untuk melacak proses
-        $table->enum('status', ['belum_mengisi', 'sudah_mengisi'])->default('belum_mengisi');
-
-        $table->timestamps();
-    });
+            $table->timestamps();
+        });
     }
 
     /**
