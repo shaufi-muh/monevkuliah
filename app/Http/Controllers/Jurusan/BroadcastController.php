@@ -82,7 +82,7 @@ class BroadcastController extends Controller
         // --- KIRIM SEMUA PESAN DALAM SATU KALI PANGGILAN HTTP ---
         try {
             $response = Http::post('http://localhost:5001/message/send-bulk', [
-                'sessionId' => 'default', // atau session ID lain jika Anda menggunakan multi-session
+                'sessionId' => 'mysession', // atau session ID lain jika Anda menggunakan multi-session
                 'messages' => $payloadMessages,
             ]);
 

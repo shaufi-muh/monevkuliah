@@ -58,6 +58,7 @@ class EvaluasiController extends Controller
 
         // 3. Ambil data jawaban dari request
         $jawabanData = $request->input('jawaban');
+        $pertanyaanIds = []; // INISIALISASI VARIABLE
         foreach ($jawabanData as $matkuls) {
             foreach ($matkuls as $pertanyaans) {
                 $pertanyaanIds = array_merge($pertanyaanIds, array_keys($pertanyaans));
