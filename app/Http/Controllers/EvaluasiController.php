@@ -97,6 +97,7 @@ class EvaluasiController extends Controller
                             'jawaban_numerik'  => $tipeJawaban == 'numerik' ? $value : null,
                             'jawaban_text'     => $tipeJawaban == 'text' ? $value : null,
                             'jawaban_tanggal'  => $tipeJawaban == 'tanggal' ? $value : null,
+                            'sesi_evaluasi_id' => $evaluasiToken->id,
                             'created_at'       => $now,
                             'updated_at'       => $now,
                         ];

@@ -14,4 +14,12 @@ class Pertanyaan extends Model
         'tipe_jawaban',
         'urutan',
     ];
+
+    /**
+     * Get the kuisioner that owns the pertanyaan.
+     */
+    public function kuisioner()
+    {
+        return $this->belongsTo(Kuisioner::class);
+    }
 }

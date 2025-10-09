@@ -15,5 +15,6 @@ class Jawaban extends Model
         'real_pertemuan',
         'jawaban_boolean',
         'keterangan',
+        'sesi_evaluasi_id',
     ];
 }
