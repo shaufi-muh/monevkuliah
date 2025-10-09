@@ -10,7 +10,7 @@
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900 dark:text-gray-100">
                     <form action="{{ route('jurusan.laporan.index') }}" method="GET">
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-4 items-end">
                             <div>
                                 <label for="prodi_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Program Studi</label>
                                 <select name="prodi_id" id="prodi_id" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
@@ -38,13 +38,31 @@
                                 </select>
                             </div>
                             <div>
-                                <button type="submit" class="mt-6 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Tampilkan</button>
+                                <label for="matakuliah_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mata Kuliah</label>
+                                <select name="matakuliah_id" id="matakuliah_id" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="">Semua Mata Kuliah</option>
+                                    @foreach($mataKuliahs as $matakuliah)
+                                        <option value="{{ $matakuliah->id }}" {{ request('matakuliah_id') == $matakuliah->id ? 'selected' : '' }}>{{ $matakuliah->nama_matkul }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label for="dosen_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Dosen Pengampu</label>
+                                <select name="dosen_id" id="dosen_id" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                                    <option value="">Semua Dosen</option>
+                                    @foreach($dosens as $dosen)
+                                        <option value="{{ $dosen->id }}" {{ request('dosen_id') == $dosen->id ? 'selected' : '' }}>{{ $dosen->nama_dosen }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">Tampilkan</button>
                             </div>
                         </div>
                     </form>
 
                     <div class="mt-8 space-y-8">
-                        @if(request()->hasAny(['prodi_id', 'tahun_akademik_id', 'semester']))
+                        @if(request()->hasAny(['prodi_id', 'tahun_akademik_id', 'semester', 'matakuliah_id', 'dosen_id']))
                             @php
                                 $hasData = false;
                                 foreach ($reportData as $data) {

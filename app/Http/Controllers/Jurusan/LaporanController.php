@@ -25,6 +25,13 @@ class LaporanController extends Controller
         // 1. Ambil data untuk filter
         $prodis = \App\Models\Prodi::where('jurusan_id', $jurusan_id)->orderBy('nama_prodi')->get();
         $tahunAkademiks = \App\Models\TahunAkademik::orderBy('tahun_akademik', 'desc')->get();
+        $prodiIds = $prodis->pluck('id');
+        $mataKuliahs = \App\Models\MataKuliah::whereHas('kelas', function ($query) use ($prodiIds) {
+            $query->whereIn('prodi_id', $prodiIds);
+        })->orderBy('nama_matkul')->get();
+        $dosens = \App\Models\Dosen::whereHas('prodi', function ($q) use ($jurusan_id) {
+            $q->where('jurusan_id', $jurusan_id);
+        })->orderBy('nama_dosen')->get();
 
         // 2. Ambil semua pertanyaan yang relevan
         $pertanyaans = \App\Models\Pertanyaan::whereHas('kuisioner', function ($query) use ($jurusan_id) {
@@ -51,7 +58,13 @@ class LaporanController extends Controller
             $query->where('tahun_akademiks.id', $request->tahun_akademik_id);
         }
         if ($request->filled('semester')) {
-            $query->where('tahun_akademiks.semester', $request->semester); // TABEL DIUBAH
+            $query->where('tahun_akademiks.semester', $request->semester);
+        }
+        if ($request->filled('matakuliah_id')) {
+            $query->where('jawabans.matakuliah_id', $request->matakuliah_id);
+        }
+        if ($request->filled('dosen_id')) {
+            $query->where('jawabans.dosen_id', $request->dosen_id);
         }
 
         $rawJawabans = $query->select(
@@ -119,6 +132,8 @@ class LaporanController extends Controller
         return view('jurusan.laporan.index', [
             'prodis' => $prodis,
             'tahunAkademiks' => $tahunAkademiks,
+            'mataKuliahs' => $mataKuliahs,
+            'dosens' => $dosens,
             'reportData' => $reportData,
             'request' => $request,
         ]);
