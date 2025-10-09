@@ -90,7 +90,24 @@
                                 {{ __('User Prodi') }}
                             </x-nav-link>
                         </div>
-                    </div>    
+                    </div>
+                    
+                    <div class="border-gray-200 dark:border-gray-700"></div>
+                        <div class="space-y-2">
+                            <h6 class="px-17 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+                                Laporan
+                            </h6>
+
+                            <x-nav-link :href="route('jurusan.laporan.index')" :active="request()->routeIs('jurusan.laporan*')">
+                                <x-slot name="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                        <path fill-rule="evenodd" d="M3 2.25a.75.75 0 0 1 .75.75v.54l1.838-.46a9.75 9.75 0 0 1 6.824 0l1.838.46v-.54a.75.75 0 0 1 1.5 0v.54l1.838-.46a9.75 9.75 0 0 1 6.824 0l.22.055a.75.75 0 0 1 .59.816l-1.5 6.75a.75.75 0 0 1-.74.629H3.75a.75.75 0 0 1-.74-.63L1.51 3.86a.75.75 0 0 1 .59-.815l.22-.056a9.75 9.75 0 0 1 6.824 0l1.838.46v-.54a.75.75 0 0 1-.75-.75Zm0 9a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm3 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm3 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm3 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm3 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm3 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Zm3 0a.75.75 0 0 1 .75.75v7.5a.75.75 0 0 1-1.5 0v-7.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                                    </svg>
+                                </x-slot>
+                                {{ __('Rekapitulasi Laporan') }}
+                            </x-nav-link>
+                        </div>
+                    </div>
                     @endif
                     @if(auth()->user()->role === 'prodi')
                     <div class="border-gray-200 dark:border-gray-700"></div>

@@ -8,6 +8,7 @@ use App\Http\Controllers\Jurusan\TahunAkademikController;
 use App\Http\Controllers\Jurusan\KuisionerController;
 use App\Http\Controllers\Jurusan\PertanyaanController;
 use App\Http\Controllers\Jurusan\BroadcastController;
+use App\Http\Controllers\Jurusan\LaporanController;
 use App\Http\Controllers\Prodi\DosenController;
 use App\Http\Controllers\Prodi\MahasiswaController;
 use App\Http\Controllers\Prodi\MataKuliahController;
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
     // Rute untuk memproses pengiriman form (action)
     Route::post('/broadcast/send', [BroadcastController::class, 'send'])->name('broadcast.send');
 
+    Route::resource('laporan', LaporanController::class);
 });
 
 // Grup Rute untuk PRODI
