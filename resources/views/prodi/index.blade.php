@@ -29,7 +29,13 @@
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $prodi->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">{{ $prodi->email }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    </td>
+                                    <a href="{{ route('prodi.edit', $prodi->id) }}" class="text-indigo-600 hover:text-indigo-900">Edit</a>
+                                    <form action="{{ route('prodi.destroy', $prodi->id) }}" method="POST" class="inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-red-600 hover:text-red-900 ml-4">Hapus</button>
+                                    </form>
+                                </td>
                             </tr>
                             @endforeach
                         </tbody>

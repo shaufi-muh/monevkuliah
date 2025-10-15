@@ -18,52 +18,80 @@
                         </div>
                     @endif
 
-                    <h3 class="font-semibold text-lg mb-4">Tambah User Prodi Baru</h3>
-                    <form action="{{ route('jurusan.userprodi.store') }}" method="POST">
-                        @csrf
-                        <!--<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4"> bagi 4-->
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-                            <div class="mt-4">
-                                <x-input-label for="name" :value="__('Nama Pengguna')" />
-                                <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
-                                <x-input-error :messages="$errors->get('name')" class="mt-2" />
-                            </div>
-                        
-                            <div class="mt-4">
-                                <x-input-label for="prodi_id" value="Pilih Prodi" />
-                                <select name="prodi_id" id="prodi_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
-                                    <option value="">Pilih Prodi</option>
-                                    @foreach ($prodis as $prodi)
-                                        <option value="{{ $prodi->id }}">{{ $prodi->nama_prodi }}</option>
-                                    @endforeach
-                                </select>
-                                <x-input-error :messages="$errors->get('prodi_id')" class="mt-2" />
+                    <button onclick="openModal()" class="inline-flex items-center px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 mb-4">
+                        Tambah User Prodi Baru
+                    </button>
+
+                    <!-- Modal -->
+                    <div id="createModal" class="fixed z-10 inset-0 overflow-y-auto hidden">
+                        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                            <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                                <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
                             </div>
 
-                            <div class="mt-4">
-                                <x-input-label for="email" :value="__('Alamat Email')" />
-                                <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
-                                <x-input-error :messages="$errors->get('email')" class="mt-2" />
-                            </div>
+                            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
-                            <div class="mt-4">
-                                <x-input-label for="password" :value="__('Password')" />
-                                <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required />
-                                <x-input-error :messages="$errors->get('password')" class="mt-2" />
-                            </div>
+                            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                                <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                                    <div class="sm:flex sm:items-start">
+                                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
+                                            <h3 class="text-lg leading-6 font-medium text-gray-900">
+                                                Tambah User Prodi Baru
+                                            </h3>
+                                            <div class="mt-2">
+                                                <form action="{{ route('jurusan.userprodi.store') }}" method="POST">
+                                                    @csrf
+                                                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
+                                                        <div class="mt-4">
+                                                            <x-input-label for="name" :value="__('Nama Pengguna')" />
+                                                            <x-text-input id="name" class="block mt-1 w-full" type="text" name="name" :value="old('name')" required autofocus />
+                                                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                                                        </div>
+                                                    
+                                                        <div class="mt-4">
+                                                            <x-input-label for="prodi_id" value="Pilih Prodi" />
+                                                            <select name="prodi_id" id="prodi_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
+                                                                <option value="">Pilih Prodi</option>
+                                                                @foreach ($prodis as $prodi)
+                                                                    <option value="{{ $prodi->id }}">{{ $prodi->nama_prodi }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                            <x-input-error :messages="$errors->get('prodi_id')" class="mt-2" />
+                                                        </div>
 
-                            <div class="mt-4">
-                                <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')" />
-                                <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
-                            </div>
+                                                        <div class="mt-4">
+                                                            <x-input-label for="email" :value="__('Alamat Email')" />
+                                                            <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')" required />
+                                                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                                                        </div>
 
-                            <div class="mt-11"> <!-- flex items-center justify-end DIHILANGKAN--> 
-                                <x-primary-button>
-                                    {{ __('Simpan') }}
-                                </x-primary-button>
+                                                        <div class="mt-4">
+                                                            <x-input-label for="password" :value="__('Password')" />
+                                                            <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required />
+                                                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
+                                                        </div>
+
+                                                        <div class="mt-4">
+                                                            <x-input-label for="password_confirmation" :value="__('Konfirmasi Password')" />
+                                                            <x-text-input id="password_confirmation" class="block mt-1 w-full" type="password" name="password_confirmation" required />
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                                    <button type="button" onclick="document.querySelector('#createModal form').submit();" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-800 text-base font-medium text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:ml-3 sm:w-auto sm:text-sm">
+                                        Simpan
+                                    </button>
+                                    <button type="button" onclick="closeModal()" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                                        Batal
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
 
                     <hr class="my-8">
 
