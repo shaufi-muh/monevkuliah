@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             
             $table->string('nama_dosen');
-            $table->string('nip')->nullable();
-            $table->string('nuptk')->nullable();
+            $table->string('nip')->nullable()->unique();
+            $table->string('nuptk')->nullable()->unique();
             //$table->string('homebase')->nullable();
             $table->foreignId('prodi_id')->constrained('prodis'); // <-- Ganti dengan ini
             $table->timestamps();

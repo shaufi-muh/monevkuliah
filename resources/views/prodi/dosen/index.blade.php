@@ -119,11 +119,12 @@
 
                     <hr class="my-8">
 
-                    <h3 class="font-semibold text-lg mb-4">Daftar Dosen</h3>
+                    <h3 class="font-semibold text-lg mb-4">Daftar Dosen Pengajar</h3>
                     <div class="overflow-x-auto">
                         <table class="min-w-full divide-y divide-gray-200">
                             <thead class="bg-gray-50">
                                 <tr>
+                                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">#</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nama</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">NIP</th>
                                     <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">NUPTK</th>
@@ -134,6 +135,7 @@
                             <tbody class="bg-white divide-y divide-gray-200">
                                 @forelse ($dosens as $dosen)
                                     <tr>
+                                        <td class="px-6 py-4 whitespace-nowrap">{{ $loop->iteration + ($dosens->currentPage() - 1) * $dosens->perPage() }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $dosen->nama_dosen }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $dosen->nip ?? '-' }}</td>
                                         <td class="px-6 py-4 whitespace-nowrap">{{ $dosen->nuptk ?? '-' }}</td>
