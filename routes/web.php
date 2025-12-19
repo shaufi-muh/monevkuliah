@@ -48,6 +48,7 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
     // Tambahkan rute jurusan lainnya di sini
 
     Route::resource('dataprodi', DataProdiController::class);
+    Route::delete('dataprodi/{dataprodi}/force-delete', [DataProdiController::class, 'forceDestroy'])->name('dataprodi.forceDestroy');
     Route::resource('userprodi', UserProdiController::class);
     Route::resource('kuisioner', KuisionerController::class); // <-- Tambahkan ini
     Route::patch('kuisioner/{kuisioner}/toggle-status', [KuisionerController::class, 'toggleStatus'])->name('kuisioner.toggleStatus');

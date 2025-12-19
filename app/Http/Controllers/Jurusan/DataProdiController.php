@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Prodi;
 use App\Models\Dosen;
 use App\Models\User;
+use App\Models\Kelas;
+use App\Models\Mahasiswa;
 use Illuminate\Http\Request;
 
 class DataProdiController extends Controller
@@ -17,7 +19,7 @@ class DataProdiController extends Controller
     {
         // Ambil hanya prodi milik jurusan user yang login
         $user = auth()->user();
-        $prodis = Prodi::with('jurusan')
+        $prodis = Prodi::with(['jurusan', 'users'])
             ->where('jurusan_id', $user->jurusan_id)
             ->latest()
             ->paginate(5);
@@ -104,10 +106,23 @@ class DataProdiController extends Controller
      */
     public function destroy(Prodi $dataprodi)
     {
-        // 1. Cek apakah prodi ini masih memiliki dosen yang terhubung
-        if ($dataprodi->dosens()->exists() || $dataprodi->users()->exists()) {
-            // 2. Jika masih ada, JANGAN HAPUS. Kembalikan ke halaman sebelumnya dengan pesan error.
-            return back()->with('error', 'Program Studi ini tidak dapat dihapus karena masih memiliki data dosen atau data user.');
+        // 1. Cek apakah prodi ini masih memiliki relasi yang terhubung
+        $dosensCount = $dataprodi->dosens()->count();
+        $usersCount = $dataprodi->users()->count();
+        $kelasCount = Kelas::where('prodi_id', $dataprodi->id)->count();
+        $mahasiswasCount = $dataprodi->mahasiswas()->count();
+
+        if ($dosensCount || $usersCount || $kelasCount || $mahasiswasCount) {
+            $parts = [];
+            if ($dosensCount) $parts[] = $dosensCount . ' dosen';
+            if ($usersCount) $parts[] = $usersCount . ' user';
+            if ($kelasCount) $parts[] = $kelasCount . ' kelas';
+            if ($mahasiswasCount) $parts[] = $mahasiswasCount . ' mahasiswa';
+
+            // gabungkan bagian dengan ' dan ' untuk pesan yang natural
+            $relasiText = implode(' dan ', $parts);
+
+            return back()->with('error', "Program Studi ini tidak dapat dihapus karena masih memiliki data terkait: {$relasiText}.");
         }
 
         // 3. Jika sudah tidak ada dosen dan data user, baru hapus data prodi
@@ -116,5 +131,37 @@ class DataProdiController extends Controller
         // 4. Redirect dengan pesan sukses
         return redirect()->route('jurusan.dataprodi.index')
             ->with('success', 'Data Prodi berhasil dihapus.');
+    }
+
+    /**
+     * Force delete a Prodi and all related data via Eloquent.
+     */
+    public function forceDestroy(Prodi $dataprodi)
+    {
+        // Hapus data dosen terkait
+        $dataprodi->dosens()->get()->each(function ($d) {
+            $d->delete();
+        });
+
+        // Hapus data mahasiswa terkait
+        $dataprodi->mahasiswas()->get()->each(function ($m) {
+            $m->delete();
+        });
+
+        // Hapus data kelas terkait (pivot akan ter-handle oleh cascade di migration)
+        \App\Models\Kelas::where('prodi_id', $dataprodi->id)->get()->each(function ($k) {
+            $k->delete();
+        });
+
+        // Hapus user terkait (jika ada)
+        $dataprodi->users()->get()->each(function ($u) {
+            $u->delete();
+        });
+
+        // Akhirnya hapus prodi
+        $dataprodi->delete();
+
+        return redirect()->route('jurusan.dataprodi.index')
+            ->with('success', 'Data Prodi dan semua data terkait berhasil dihapus.');
     }
 }

@@ -78,8 +78,8 @@ class UserProdiController extends Controller
             'jurusan_id' => auth()->user()->jurusan_id,
         ]);
         
-        // 3. Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('jurusan.userprodi.index')->with('success', 'User Prodi berhasil ditambahkan.');
+        // 3. Redirect kembali ke halaman daftar prodi dengan pesan sukses
+        return redirect()->route('jurusan.dataprodi.index')->with('success', 'User Prodi berhasil ditambahkan.');
     }
 
     /**
@@ -130,8 +130,8 @@ class UserProdiController extends Controller
         // 4. Simpan perubahan
         $userprodi->save();
 
-        // 5. Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('jurusan.userprodi.index')->with('success', 'Data User Prodi berhasil diperbarui.');
+        // 5. Redirect kembali ke halaman daftar prodi dengan pesan sukses
+        return redirect()->route('jurusan.dataprodi.index')->with('success', 'Data User Prodi berhasil diperbarui.');
     }
 
     /**
@@ -142,8 +142,8 @@ class UserProdiController extends Controller
         // Hapus data user
         $userprodi->delete();
 
-        // Redirect ke halaman index dengan pesan sukses
-        return redirect()->route('jurusan.userprodi.index')->with('success', 'User Prodi berhasil dihapus.');
+        // Redirect kembali ke halaman daftar prodi dengan pesan sukses
+        return redirect()->route('jurusan.dataprodi.index')->with('success', 'User Prodi berhasil dihapus.');
     }
 }
  /* BATAAAALLLLL

@@ -31,7 +31,7 @@
                              <select name="prodi_id" id="prodi_id" class="block mt-1 w-full rounded-md shadow-sm border-gray-300 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
                                 <option value="">-- Pilih Program Studi --</option>
                                 @foreach($prodiList as $prodi)
-                                    <option value="{{ $prodi->id }}" {{ old('prodi_id') == $prodi->id ? 'selected' : '' }}>
+                                    <option value="{{ $prodi->id }}" {{ (string) old('prodi_id', request('prodi_id')) === (string) $prodi->id ? 'selected' : '' }}>
                                         {{ $prodi->nama_prodi }}
                                     </option>
                                 @endforeach

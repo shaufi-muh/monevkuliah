@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('jurusan_id')->nullable()->constrained()->after('role');
 
             // Menambahkan foreign key untuk Prodi
-            $table->foreignId('prodi_id')->nullable()->constrained()->after('jurusan_id');
+            $table->foreignId('prodi_id')->nullable()->constrained()->onDelete('cascade')->after('jurusan_id');
         });
     }
 
