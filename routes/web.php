@@ -64,6 +64,57 @@ Route::middleware(['auth', 'role:jurusan'])->prefix('jurusan')->name('jurusan.')
     Route::post('/broadcast/send', [BroadcastController::class, 'send'])->name('broadcast.send');
 
     Route::resource('laporan', LaporanController::class);
+
+    // API: daftar dosen untuk jurusan (dipakai modal)
+    Route::get('/dosens', function () {
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id ?? null;
+        $query = \App\Models\Dosen::query();
+        if ($jurusanId) {
+            $query = $query->whereHas('prodi', function ($q) use ($jurusanId) {
+                $q->where('jurusan_id', $jurusanId);
+            });
+        }
+        $dosens = $query->select('id', 'nama_dosen', 'nip')->get();
+        $currentKetuaId = null;
+        if ($jurusanId) {
+            $jurusan = \App\Models\Jurusan::find($jurusanId);
+            if ($jurusan) $currentKetuaId = $jurusan->kajur_id; // use kajur_id per your migration
+        }
+        return response()->json(['data' => $dosens, 'current_ketua_id' => $currentKetuaId]);
+    });
+
+    // Simpan ketua jurusan
+    Route::post('/ketua', function () {
+        $user = auth()->user();
+        $jurusanId = $user->jurusan_id;
+        $dosenId = request('dosen_id');
+        if (! $jurusanId) return response()->json(['message' => 'Jurusan tidak ditemukan'], 422);
+        $jurusan = \App\Models\Jurusan::find($jurusanId);
+        // Guard: ensure the database column exists to avoid a 500 error
+        if (! \Illuminate\Support\Facades\Schema::hasColumn('jurusans', 'kajur_id')) {
+            return response()->json([
+                'message' => 'Kolom kajur_id belum ada pada tabel jurusans. Jalankan `php artisan migrate`.'
+            ], 500);
+        }
+
+        $jurusan->kajur_id = $dosenId ?: null;
+        $jurusan->save();
+
+        $ketua = null;
+        if ($jurusan->kajur_id) {
+            $ketuaModel = \App\Models\Dosen::find($jurusan->kajur_id);
+            if ($ketuaModel) {
+                $ketua = [
+                    'id' => $ketuaModel->id,
+                    'nama_dosen' => $ketuaModel->nama_dosen,
+                    'nip' => $ketuaModel->nip,
+                ];
+            }
+        }
+
+        return response()->json(['message' => 'Ketua jurusan tersimpan', 'ketua' => $ketua]);
+    });
 });
 
 // Grup Rute untuk PRODI

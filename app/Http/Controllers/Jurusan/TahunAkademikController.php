@@ -18,11 +18,17 @@ class TahunAkademikController extends Controller
      */
     public function dashboard()
     {
-        $jurusanId = Auth::user()->jurusan_id;
+        $user = Auth::user();
+        $jurusan = $user->jurusan()->with('ketua')->first();
+        $jurusanId = $jurusan->id ?? $user->jurusan_id;
+
         $tahunAkademikAktif = TahunAkademik::where('jurusan_id', $jurusanId)
             ->where('status', 'aktif')
             ->first();
-        return view('jurusan.dashboard', compact('tahunAkademikAktif'));
+
+        $ketua = $jurusan->ketua ?? null;
+
+        return view('jurusan.dashboard', compact('tahunAkademikAktif', 'ketua'));
     }
     
     public function index()
