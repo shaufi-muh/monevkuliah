@@ -195,9 +195,7 @@
             </div>
 
             <div class="mt-3 space-y-1">
-                <x-responsive-nav-link :href="route('profile.edit')">
-                    {{ __('Profile') }}
-                </x-responsive-nav-link>
+                <button @click="open = false; $dispatch('open-modal', 'profile-modal')" class="w-full text-left block px-4 py-2 text-base font-medium text-gray-700 dark:text-gray-200">{{ __('Profile') }}</button>
 
                 <!-- Authentication -->
                 <form method="POST" action="{{ route('logout') }}">

@@ -77,9 +77,7 @@
                                         </x-slot>
 
                                         <x-slot name="content">
-                                            <x-dropdown-link :href="route('profile.edit')">
-                                                {{ __('Profile') }}
-                                            </x-dropdown-link>
+                                                <a href="#" @click.prevent="$dispatch('open-modal', 'profile-modal')" class="block px-4 py-2 text-sm text-gray-700 dark:text-gray-100">{{ __('Profile') }}</a>
 
                                             <!-- Authentication -->
                                             <form method="POST" action="{{ route('logout') }}">
@@ -127,6 +125,132 @@
                 {{ $slot }}
             </main>
             --}}
+            <!-- Profile modal (tabs) -->
+            <x-modal name="profile-modal" maxWidth="lg" focusable>
+                <div class="p-4">
+                    <div x-data="profileModal()" class="w-full h-96 flex flex-col">
+                        <div class="flex items-center gap-6 border-b pb-3">
+                            <button type="button" @click="tab='info'" :class="tab==='info' ? 'bg-indigo-50 text-indigo-700 px-4 py-2 rounded-md shadow-sm' : 'text-gray-600 dark:text-gray-200 px-4 py-2 rounded-md'"> 
+                                <svg class="inline w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.386 0 4.633.563 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                {{ __('Profile') }}
+                            </button>
+
+                            <button type="button" @click="(tab='ketua', loadDosens())" :class="tab==='ketua' ? 'bg-indigo-50 text-indigo-700 px-4 py-2 rounded-md shadow-sm' : 'text-gray-600 dark:text-gray-200 px-4 py-2 rounded-md'">
+                                <svg class="inline w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7 7h.01M7 11h.01M7 15h.01"/></svg>
+                                {{ __('Ketua Jurusan') }}
+                            </button>
+
+                            <button type="button" @click="tab='password'" :class="tab==='password' ? 'bg-indigo-50 text-indigo-700 px-4 py-2 rounded-md shadow-sm' : 'text-gray-600 dark:text-gray-200 px-4 py-2 rounded-md'">
+                                <svg class="inline w-4 h-4 me-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 11c1.657 0 3-1.343 3-3S13.657 5 12 5 9 6.343 9 8s1.343 3 3 3z"/></svg>
+                                {{ __('Password') }}
+                            </button>
+
+                            
+                            <!-- delete tab disabled; removed per request -->
+                        </div>
+
+                        <div class="flex-1 overflow-auto mt-4">
+                            <div x-show="tab==='info'" x-cloak>
+                                @include('profile.partials.update-profile-information-form', ['user' => Auth::user()])
+                            </div>
+
+                            <div x-show="tab==='password'" x-cloak>
+                                @include('profile.partials.update-password-form')
+                            </div>
+
+                            <div x-show="tab==='ketua'" x-cloak class="px-2">
+                                @include('profile.partials.manage-kajur')
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    function profileModal() {
+                        return {
+                            tab: 'info',
+                            dosens: [],
+                            loadingDosens: false,
+                            selectedKetua: null,
+                            message: null,
+                            query: '',
+                            dropdownOpen: false,
+                            loadDosens() {
+                                if (this.dosens.length) return;
+                                this.loadingDosens = true;
+                                const url = '{{ url('/jurusan/dosens') }}';
+                                fetch(url, { credentials: 'same-origin' })
+                                    .then(r => r.json())
+                                    .then(resp => { this.dosens = resp.data || []; if (resp.current_ketua_id) this.selectedKetua = resp.current_ketua_id; })
+                                    .catch(() => {})
+                                    .finally(() => this.loadingDosens = false);
+                            },
+                            filteredDosens() {
+                                if (!this.query) return this.dosens;
+                                return this.dosens.filter(d => (d.nama_dosen || '').toLowerCase().includes(this.query.toLowerCase()));
+                            },
+                            openDropdown() { this.dropdownOpen = true; },
+                            closeDropdown() { this.dropdownOpen = false; },
+                            chooseDosen(id) { this.selectedKetua = id; this.dropdownOpen = false; this.query = this.dosens.find(d => d.id == id)?.nama_dosen || ''; },
+                            onInputDosen(e) {
+                                const val = e.target.value || '';
+                                this.query = val;
+                                const needle = (val || '').toString();
+                                const match = this.dosens.find(d => (d.nama_dosen + ' — ' + (d.nip || '-')) === needle);
+                                if (match) {
+                                    this.selectedKetua = match.id;
+                                } else {
+                                    this.selectedKetua = null;
+                                }
+                            },
+                            saveKetua() {
+                                this.message = null;
+                                const url = '{{ url('/jurusan/ketua') }}';
+                                fetch(url, {
+                                    method: 'POST',
+                                    credentials: 'same-origin',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                    },
+                                    body: JSON.stringify({ dosen_id: this.selectedKetua })
+                                })
+                                .then(r => {
+                                    if (!r.ok) {
+                                        return r.text().then(t => { throw new Error(t || ('HTTP ' + r.status)); });
+                                    }
+                                    return r.json();
+                                })
+                                .then(js => {
+                                      this.message = js.message || 'Sukses';
+                                      // Update dashboard DOM if present
+                                      try {
+                                          const ketua = js.ketua || null;
+                                          const block = document.getElementById('ketua-block');
+                                          const empty = document.getElementById('ketua-empty');
+                                          if (ketua && block) {
+                                              const nameEl = document.getElementById('ketua-nama');
+                                              const nipEl = document.getElementById('ketua-nip');
+                                              if (nameEl) nameEl.textContent = ketua.nama_dosen || '';
+                                              if (nipEl) nipEl.textContent = ketua.nip || '';
+                                              if (block.classList.contains('hidden')) block.classList.remove('hidden');
+                                              if (empty && !empty.classList.contains('hidden')) empty.classList.add('hidden');
+                                          } else if (block && empty) {
+                                              // no ketua selected -> show empty
+                                              if (!block.classList.contains('hidden')) block.classList.add('hidden');
+                                              if (empty.classList.contains('hidden')) empty.classList.remove('hidden');
+                                          }
+                                      } catch (e) {
+                                          // ignore DOM update errors
+                                      }
+                                  })
+                                  .catch((err) => { console.error('saveKetua error:', err); this.message = 'Terjadi kesalahan' + (err?.message ? ': ' + err.message : ''); });
+                            }
+                        };
+                    }
+                </script>
+            </x-modal>
+
         </div>
     </body>
 </html>
